@@ -1,16 +1,7 @@
 #ifndef COMPONENT
 #define COMPONENT
 
-struct Workday
-{
-    std::vector<Sprint> sprints;
-};
-
-struct Sprint
-{
-    SprintTime time;
-    SprintType type;
-};
+#include <vector>
 
 struct SprintTime
 {
@@ -25,6 +16,24 @@ enum class SprintType
     FuckUp,
     Work,
     Rest,
+    WorkPaused,
+    RestPaused,
+};
+
+struct Sprint
+{
+    SprintTime time;
+    SprintType type;
+};
+
+struct Workday
+{
+    std::vector<Sprint> sprints;
+};
+
+struct History
+{
+    std::vector<Workday> workdays;
 };
 
 struct ColorScheme

@@ -5,7 +5,7 @@ Engine::Engine()
 
 }
 
-Sprint Engine::currentSprint()
+Sprint Engine::sprint()
 {
     Sprint sprint;
     sprint.type = SprintType::Work;
@@ -26,6 +26,7 @@ void Engine::setWorkday(const Workday& workday)
 
 const Workday& Engine::workday() const
 {
-    return;
+    static Workday w;
+    return w;
 }
 
