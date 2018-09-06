@@ -1,5 +1,5 @@
-#ifndef COMPONENT
-#define COMPONENT
+#ifndef BEFOXY_CORE_COMPONENT
+#define BEFOXY_CORE_COMPONENT
 
 #include <vector>
 
@@ -13,11 +13,15 @@ struct SprintTime
 enum class SprintType
 {
     Unknown,
-    FuckUp,
+    WorkdayStart,
+    NoTracking,
     Work,
     Rest,
     WorkPaused,
     RestPaused,
+    WorkOvertime,
+    RestOvertime,
+    WorkdayEnd,
 };
 
 struct Sprint
@@ -47,5 +51,5 @@ struct ColorScheme
     // workday background
 };
 
-#endif // COMPONENT
+#endif // BEFOXY_CORE_COMPONENT
 

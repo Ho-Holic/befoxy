@@ -24,5 +24,7 @@ HEADERS  += visual/Befoxy.hpp \
     core/DataStorage.hpp \
     core/Engine.hpp \
     core/Component.hpp \
-    core/Services.hpp
+    core/Services.hpp \
+    visual/Component.hpp \
+    style/Guidelines.hpp
 

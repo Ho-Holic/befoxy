@@ -1,4 +1,5 @@
 #include "Engine.hpp"
+#include "style/Guidelines.hpp"
 
 Engine::Engine()
 {
@@ -13,6 +14,17 @@ Sprint Engine::sprint()
     return sprint;
 }
 
+void Engine::tap()
+{
+    // tap to affect sprint: start/pause/continue
+}
+
+void Engine::skip()
+{
+    // tap to skip this sprint
+    // you need to track skips in analytics too
+}
+
 void Engine::update()
 {
     // 1. update engine clock
@@ -25,8 +37,7 @@ void Engine::setWorkday(const Workday& workday)
 }
 
 const Workday& Engine::workday() const
-{
-    static Workday w;
-    return w;
+{    
+    return fake<Workday>();
 }
 

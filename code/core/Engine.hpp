@@ -11,6 +11,8 @@ public:
   Engine();
 public:
   Sprint sprint();
+  void tap();
+  void skip();
   void update();
   void setWorkday(const Workday& workday);
   const Workday& workday() const;
