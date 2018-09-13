@@ -16,6 +16,8 @@ public:
   void update();
   void setWorkday(const Workday& workday);
   const Workday& workday() const;
+private:  
+  Workday m_workday;
 };
 
 #endif // ENGINE_HPP

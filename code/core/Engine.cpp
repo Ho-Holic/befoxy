@@ -1,9 +1,27 @@
 #include "Engine.hpp"
 #include "style/Guidelines.hpp"
 
-Engine::Engine()
-{
+namespace {
+    Workday fakeWorkday()
+    {
+        std::vector<Sprint> w = {
+            { SprintType::WorkdayStart, {0, 0, 0} },
 
+            { SprintType::Work, {0, 35, 0} },
+            { SprintType::Rest, {0, 15, 0} },
+            { SprintType::Work, {0, 35, 0} },
+            { SprintType::Rest, {0, 15, 0} },
+
+            { SprintType::WorkdayEnd, {0, 0, 0} },
+        };
+        return Workday { w };
+    }
+}
+
+Engine::Engine()
+:   m_workday(fakeWorkday())
+{
+    //
 }
 
 Sprint Engine::sprint()
@@ -32,12 +50,12 @@ void Engine::update()
 }
 
 void Engine::setWorkday(const Workday& workday)
-{
-    // replace workday
+{    
+    m_workday = workday;
 }
 
 const Workday& Engine::workday() const
 {    
-    return fake<Workday>();
+    return m_workday;
 }
 

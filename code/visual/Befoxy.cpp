@@ -2,6 +2,8 @@
 #include <QPainter>
 #include <QTimer>
 #include <QLabel>
+#include <QPushButton>
+#include <QVBoxLayout>
 #include <core/Services.hpp>
 
 Befoxy::Befoxy(QWidget *parent)
@@ -9,7 +11,13 @@ Befoxy::Befoxy(QWidget *parent)
 {
     // layout
     {
+        QVBoxLayout* layout = new QVBoxLayout(this);
         QLabel* clockText = new QLabel("00:00", this);
+        QPushButton* tapButton = new QPushButton(this);
+
+        layout->addWidget(clockText);
+        layout->addWidget(tapButton);
+
         m_clockText = clockText;
     }
 

@@ -5,9 +5,9 @@
 
 struct SprintTime
 {
-    int hour;
-    int min;
-    int sec;
+    int hour = 0;
+    int min = 0;
+    int sec = 0;
 };
 
 enum class SprintType
@@ -26,8 +26,8 @@ enum class SprintType
 
 struct Sprint
 {
+    SprintType type = SprintType::Unknown;
     SprintTime time;
-    SprintType type;
 };
 
 struct Workday
