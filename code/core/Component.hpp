@@ -51,5 +51,10 @@ struct ColorScheme
     // workday background
 };
 
+struct Config
+{
+    float sprintSwitchThresholdSec = 3.0;
+};
+
 #endif // BEFOXY_CORE_COMPONENT
 

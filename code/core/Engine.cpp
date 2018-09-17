@@ -1,27 +1,31 @@
 #include "Engine.hpp"
 #include "style/Guidelines.hpp"
-
-namespace {
-    Workday fakeWorkday()
-    {
-        std::vector<Sprint> w = {
-            { SprintType::WorkdayStart, {0, 0, 0} },
-
-            { SprintType::Work, {0, 35, 0} },
-            { SprintType::Rest, {0, 15, 0} },
-            { SprintType::Work, {0, 35, 0} },
-            { SprintType::Rest, {0, 15, 0} },
-
-            { SprintType::WorkdayEnd, {0, 0, 0} },
-        };
-        return Workday { w };
-    }
-}
+#include <algorithm>
 
 Engine::Engine()
-:   m_workday(fakeWorkday())
+:   m_ideal()
+,   m_current()
 {
     //
+}
+
+void Engine::init(const Workday& workday)
+{
+    // clean up
+    m_ideal.sprints.clear();
+    m_current.sprints.clear();
+
+    // make a stack from ideal workday
+    m_ideal = workday;
+    std::reverse(m_ideal.sprints.begin(), m_ideal.sprints.end());
+
+    require(!workday.sprints.empty());
+
+    auto sprint = m_ideal.sprints.back();
+    m_ideal.sprints.pop_back();
+
+    m_current.sprints.push_back(sprint);
+
 }
 
 Sprint Engine::sprint()
@@ -49,13 +53,8 @@ void Engine::update()
     // 2. recalculate sprint
 }
 
-void Engine::setWorkday(const Workday& workday)
-{    
-    m_workday = workday;
-}
-
 const Workday& Engine::workday() const
-{    
-    return m_workday;
+{        
+    return m_ideal;
 }
 

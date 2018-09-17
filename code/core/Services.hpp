@@ -2,14 +2,20 @@
 #define SERVICES_HPP
 
 #include <core/Engine.hpp>
+#include <core/DataStorage.hpp>
+#include <memory>
 
 class Services
 {
 public:
     Services();
 public:
+    void init();
+public:
+    DataStorage& dataStorage();
     Engine& engine();
-private:
+private:    
+    DataStorage m_dataStorage;
     Engine m_engine;
 };
 

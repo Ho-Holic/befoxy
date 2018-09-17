@@ -10,14 +10,17 @@ class Engine
 public:
   Engine();
 public:
+  void init(const Workday& workday);
+public:
   Sprint sprint();
   void tap();
   void skip();
   void update();
-  void setWorkday(const Workday& workday);
   const Workday& workday() const;
+
 private:  
-  Workday m_workday;
+  Workday m_ideal;
+  Workday m_current;
 };
 
 #endif // ENGINE_HPP
