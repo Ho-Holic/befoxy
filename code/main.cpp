@@ -9,6 +9,7 @@ int main(int argc, char *argv[])
   services().init();
 
   Befoxy w;
+  w.resize(320, 320);
   w.show();
 
   return a.exec();

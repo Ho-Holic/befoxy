@@ -12,8 +12,12 @@ Befoxy::Befoxy(QWidget *parent)
     // layout
     {
         QVBoxLayout* layout = new QVBoxLayout(this);
-        QLabel* clockText = new QLabel("00:00", this);
+        QLabel* clockText = new QLabel("00:00", this);        
         QPushButton* tapButton = new QPushButton(this);
+
+        connect(tapButton, &QPushButton::clicked, []{
+            services().engine().tap();
+        });
 
         layout->addWidget(clockText);
         layout->addWidget(tapButton);
@@ -36,8 +40,12 @@ void Befoxy::updateVisual()
 {
     auto sprint = services().engine().sprint();
     if (sprint.time.hour > 0) {
-        m_clockText->setText(QString("%1").arg(sprint.time.hour));
+        m_clockText->setText(QString("%1:%2")
+            .arg(sprint.time.hour, 2, 10, QChar('0'))
+            .arg(sprint.time.min, 2, 10, QChar('0')));
     } else {
-        m_clockText->setText(QString("%1:%2").arg(sprint.time.min).arg(sprint.time.sec));
+        m_clockText->setText(QString("%1:%2")
+            .arg(sprint.time.min, 2, 10, QChar('0'))
+            .arg(sprint.time.sec, 2, 10, QChar('0')));
     }
 }

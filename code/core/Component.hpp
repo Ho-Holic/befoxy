@@ -2,31 +2,37 @@
 #define BEFOXY_CORE_COMPONENT
 
 #include <vector>
+#include <cstdint>
 
 struct SprintTime
 {
-    int hour = 0;
-    int min = 0;
-    int sec = 0;
+    int64_t hour = 0;
+    int64_t min = 0;
+    int64_t sec = 0;
 };
 
 enum class SprintType
 {
     Unknown,
-    WorkdayStart,
     NoTracking,
+    WorkdayStart,
+    WorkdayEnd,
     Work,
     Rest,
-    WorkPaused,
-    RestPaused,
-    WorkOvertime,
-    RestOvertime,
-    WorkdayEnd,
+};
+
+enum class SprintState
+{
+    Unknown,
+    Normal,
+    Paused,
+    Overtime,
 };
 
 struct Sprint
 {
     SprintType type = SprintType::Unknown;
+    SprintState state = SprintState::Normal;
     SprintTime time;
 };
 

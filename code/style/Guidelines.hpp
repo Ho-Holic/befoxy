@@ -23,6 +23,11 @@ inline void require(bool holds)
     assert(holds);
 }
 
+inline void unexpected_path()
+{
+    assert(false);
+}
+
 
 
 #endif // GUIDELINES_HPP
