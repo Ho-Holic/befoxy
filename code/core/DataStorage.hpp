@@ -1,5 +1,5 @@
-#ifndef DATASTORAGE_HPP
-#define DATASTORAGE_HPP
+#ifndef BEFOXY_CORE_DATASTORAGE_HPP
+#define BEFOXY_CORE_DATASTORAGE_HPP
 
 
 class DataStorage
@@ -8,4 +8,4 @@ public:
   DataStorage();
 };
 
-#endif // DATASTORAGE_HPP
+#endif // BEFOXY_CORE_DATASTORAGE_HPP

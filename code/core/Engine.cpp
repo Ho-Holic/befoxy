@@ -21,7 +21,7 @@ void Engine::init(const Workday& workday)
     tap(); // initial tap
 }
 
-Sprint Engine::sprint()
+Sprint Engine::sprint() const
 {    
     using namespace std::chrono;
 

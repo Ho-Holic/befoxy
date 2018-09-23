@@ -1,5 +1,5 @@
-#ifndef SERIALIZER_HPP
-#define SERIALIZER_HPP
+#ifndef BEFOXY_CORE_SERIALIZER_HPP
+#define BEFOXY_CORE_SERIALIZER_HPP
 
 #include <string>
 #include "core/Component.hpp"
@@ -31,5 +31,5 @@ Workday parseWorkday(const std::string& data)
     return;
 }
 
-#endif // SERIALIZER_HPP
+#endif // BEFOXY_CORE_SERIALIZER_HPP
 

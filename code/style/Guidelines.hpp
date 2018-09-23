@@ -1,5 +1,5 @@
-#ifndef GUIDELINES_HPP
-#define GUIDELINES_HPP
+#ifndef BEFOXY_STYLE_GUIDELINES_HPP
+#define BEFOXY_STYLE_GUIDELINES_HPP
 
 #include <utility>
 #include <assert.h>
@@ -30,5 +30,5 @@ inline void unexpected_path()
 
 
 
-#endif // GUIDELINES_HPP
+#endif // BEFOXY_STYLE_GUIDELINES_HPP
 

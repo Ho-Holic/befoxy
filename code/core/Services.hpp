@@ -1,5 +1,5 @@
-#ifndef SERVICES_HPP
-#define SERVICES_HPP
+#ifndef BEFOXY_CORE_SERVICES_HPP
+#define BEFOXY_CORE_SERVICES_HPP
 
 #include <core/Engine.hpp>
 #include <core/DataStorage.hpp>
@@ -21,4 +21,4 @@ private:
 
 Services& services();
 
-#endif // SERVICES_HPP
+#endif // BEFOXY_CORE_SERVICES_HPP

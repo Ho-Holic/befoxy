@@ -1,5 +1,5 @@
-#ifndef ENGINE_HPP
-#define ENGINE_HPP
+#ifndef BEFOXY_CORE_ENGINE_HPP
+#define BEFOXY_CORE_ENGINE_HPP
 
 #include <vector>
 #include <chrono>
@@ -16,7 +16,7 @@ public:
 public:
   void init(const Workday& workday);
 public:
-  Sprint sprint();
+  Sprint sprint() const;
   void tap();
   void skip();
   void update();
@@ -28,4 +28,4 @@ private:
   TimePoint m_sprintEnd;
 };
 
-#endif // ENGINE_HPP
+#endif // BEFOXY_CORE_ENGINE_HPP

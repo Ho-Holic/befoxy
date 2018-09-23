@@ -1,5 +1,5 @@
-#ifndef BEFOXY_HPP
-#define BEFOXY_HPP
+#ifndef BEFOXY_VISUAL_BEFOXY_HPP
+#define BEFOXY_VISUAL_BEFOXY_HPP
 
 #include <QWidget>
 
@@ -9,11 +9,12 @@ class Befoxy : public QWidget
 {
     Q_OBJECT
 public:
-    Befoxy(QWidget *parent = 0);
+    Befoxy(QWidget* parent = nullptr);
 private slots:
     void updateVisual();
 private:
     QLabel* m_clockText;
+    QLabel* m_sprintName;
 };
 
-#endif // BEFOXY_HPP
+#endif // BEFOXY_VISUAL_BEFOXY_HPP

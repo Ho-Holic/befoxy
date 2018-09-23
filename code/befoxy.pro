@@ -17,7 +17,8 @@ SOURCES += main.cpp\
         visual/Befoxy.cpp \
     core/DataStorage.cpp \
     core/Engine.cpp \
-    core/Services.cpp
+    core/Services.cpp \
+    core/Conversion.cpp
 
 HEADERS  += visual/Befoxy.hpp \
     core/Serializer.hpp \
@@ -26,5 +27,7 @@ HEADERS  += visual/Befoxy.hpp \
     core/Component.hpp \
     core/Services.hpp \
     visual/Component.hpp \
-    style/Guidelines.hpp
+    style/Guidelines.hpp \
+    core/utility/MirrorMap.hpp \
+    core/Conversion.hpp
 
