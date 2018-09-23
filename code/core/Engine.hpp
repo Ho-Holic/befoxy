@@ -2,15 +2,11 @@
 #define BEFOXY_CORE_ENGINE_HPP
 
 #include <vector>
-#include <chrono>
 
 #include "core/Component.hpp"
 
 class Engine
 {
-public:
-    using TimePoint = std::chrono::system_clock::time_point;
-    using Clock = std::chrono::system_clock;
 public:
   Engine();
 public:
@@ -18,8 +14,7 @@ public:
 public:
   Sprint sprint() const;
   void tap();
-  void skip();
-  void update();
+  void skip();  
   const Workday& workday() const;
 
 private:  

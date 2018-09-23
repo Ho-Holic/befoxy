@@ -18,4 +18,15 @@ static auto sprintTypeMap()
     return cache;
 }
 
+static auto sprintStateMap()
+{
+    static auto cache = makeMirrorMap<SprintState, std::string>({
+        { SprintState:: Unknown, "Unknown" },
+        { SprintState:: Normal, "Normal" },
+        { SprintState:: Paused, "Paused" },
+        { SprintState:: Overtime, "Overtime" },
+    });
+    return cache;
+}
+
 #endif // BEFOXY_CORE_CONVERSION_HPP

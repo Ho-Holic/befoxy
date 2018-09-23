@@ -13,7 +13,7 @@ namespace {
 
             { SprintType::WorkdayEnd,  SprintState::Normal, {0, 0, 0} },
         };
-        return Workday { w };
+        return Workday { {}, w };
     }
 }
 

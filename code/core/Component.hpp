@@ -3,6 +3,10 @@
 
 #include <vector>
 #include <cstdint>
+#include <chrono>
+
+using TimePoint = std::chrono::system_clock::time_point;
+using Clock = std::chrono::system_clock;
 
 struct SprintTime
 {
@@ -38,6 +42,7 @@ struct Sprint
 
 struct Workday
 {
+    TimePoint day;
     std::vector<Sprint> sprints;
 };
 

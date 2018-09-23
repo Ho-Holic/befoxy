@@ -44,6 +44,8 @@ Sprint Engine::sprint() const
         diff -= minutes(sprintCopy.time.min);
 
         sprintCopy.time.sec = duration_cast<seconds>(diff).count();
+
+        sprintCopy.state = hasOvertime ? SprintState::Overtime : SprintState::Normal;
     }
 
     return sprintCopy;
@@ -58,14 +60,23 @@ void Engine::tap()
 
     require(!m_ideal.sprints.empty());
 
-    auto sprint = m_ideal.sprints.back();
 
     auto now = Clock::now();
 
-    if (now > m_sprintEnd) {
+    bool hasOvertime = now > m_sprintEnd;
+    if (hasOvertime) {
 
+        // add overtime sprint
+        if (!m_current.sprints.empty()) {
+            Sprint overtimeSprint = sprint();
+            m_current.sprints.push_back(overtimeSprint);
+        }
+
+        // add next real sprint
+        auto sprint = m_ideal.sprints.back();
         m_ideal.sprints.pop_back();
         m_current.sprints.push_back(sprint);
+
 
         m_sprintEnd = now
                 + hours(sprint.time.hour)
@@ -78,12 +89,6 @@ void Engine::skip()
 {
     // tap to skip this sprint
     // you need to track skips in analytics too
-}
-
-void Engine::update()
-{
-    // 1. update engine clock
-    // 2. recalculate sprint
 }
 
 const Workday& Engine::workday() const
