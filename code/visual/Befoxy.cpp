@@ -53,7 +53,7 @@ void Befoxy::updateVisual()
             .arg(sprint.time.min, 2, 10, QChar('0'))
             .arg(sprint.time.sec, 2, 10, QChar('0')));
     }
-    auto type = QString::fromStdString(sprintTypeMap()(sprint.type));
-    auto state = QString::fromStdString(sprintStateMap()(sprint.state));
+    auto type = sprintTypeMap()(sprint.type);
+    auto state = sprintStateMap()(sprint.state);
     m_sprintName->setText(type + ": " + state);
 }

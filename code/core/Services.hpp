@@ -8,10 +8,6 @@
 class Services
 {
 public:
-    Services();
-public:
-    void init();
-public:
     DataStorage& dataStorage();
     Engine& engine();
 private:    

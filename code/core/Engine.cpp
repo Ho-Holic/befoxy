@@ -9,14 +9,15 @@ Engine::Engine()
     //
 }
 
-void Engine::init(const Workday& workday)
+void Engine::init(const Workday& idealWorkday)
 {
     // clean up
     m_ideal.sprints.clear();
     m_current.sprints.clear();
+    m_sprintEnd = TimePoint();
 
     // make a stack from ideal workday
-    m_ideal = workday;
+    m_ideal = idealWorkday;
     std::reverse(m_ideal.sprints.begin(), m_ideal.sprints.end());
     tap(); // initial tap
 }
@@ -93,6 +94,6 @@ void Engine::skip()
 
 const Workday& Engine::workday() const
 {        
-    return m_ideal;
+    return m_current;
 }
 

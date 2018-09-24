@@ -1,7 +1,6 @@
 #ifndef BEFOXY_CORE_SERIALIZER_HPP
 #define BEFOXY_CORE_SERIALIZER_HPP
 
-#include <string>
 #include "core/Component.hpp"
 #include <QJsonObject>
 
@@ -25,10 +24,10 @@ struct Serializer<Workday>
     }
 };
 
-Workday parseWorkday(const std::string& data)
+Workday parseWorkday(const QString& data)
 {
     // parse format '(+35m -10m) * 4 -1h + (+35m -10m) * 4'
-    return;
+    return {};
 }
 
 #endif // BEFOXY_CORE_SERIALIZER_HPP

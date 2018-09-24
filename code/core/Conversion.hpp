@@ -1,13 +1,13 @@
 #ifndef BEFOXY_CORE_CONVERSION_HPP
 #define BEFOXY_CORE_CONVERSION_HPP
 
-#include <string>
+#include <QString>
 #include "core/Component.hpp"
 #include "core/utility/MirrorMap.hpp"
 
 static auto sprintTypeMap()
 {
-    static auto cache = makeMirrorMap<SprintType, std::string>({
+    static auto cache = makeMirrorMap<SprintType, QString>({
         { SprintType:: Unknown, "Unknown" },
         { SprintType:: NoTracking, "NoTracking" },
         { SprintType:: WorkdayStart, "WorkdayStart" },
@@ -20,7 +20,7 @@ static auto sprintTypeMap()
 
 static auto sprintStateMap()
 {
-    static auto cache = makeMirrorMap<SprintState, std::string>({
+    static auto cache = makeMirrorMap<SprintState, QString>({
         { SprintState:: Unknown, "Unknown" },
         { SprintState:: Normal, "Normal" },
         { SprintState:: Paused, "Paused" },

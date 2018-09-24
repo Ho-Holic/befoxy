@@ -10,7 +10,7 @@ class Engine
 public:
   Engine();
 public:
-  void init(const Workday& workday);
+  void init(const Workday& idealWorkday);
 public:
   Sprint sprint() const;
   void tap();
