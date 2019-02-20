@@ -2,9 +2,9 @@
 #define BEFOXY_VISUAL_BEFOXY_HPP
 
 #include <QWidget>
+#include <QSystemTrayIcon>
 
 class QLabel;
-class QSystemTrayIcon;
 
 class Befoxy : public QWidget
 {
@@ -13,6 +13,7 @@ public:
     Befoxy(QWidget* parent = nullptr);
 private slots:
     void updateVisual();
+    void trayIconActivated(QSystemTrayIcon::ActivationReason);
 private:
     QLabel* m_clockText;
     QLabel* m_sprintName;

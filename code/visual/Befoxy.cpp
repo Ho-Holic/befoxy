@@ -7,17 +7,35 @@
 #include <core/Services.hpp>
 #include <core/Conversion.hpp>
 #include <visual/Conversion.hpp>
-#include <QSystemTrayIcon>
+#include <QApplication>
+#include <QDesktopWidget>
+
+#include <QMessageBox>
+#include <QDebug>
 
 Befoxy::Befoxy(QWidget *parent)
 :   QWidget(parent)
 {
+    this->setWindowFlags(Qt::Popup);
+
     // layout
     {
         QVBoxLayout* layout = new QVBoxLayout(this);
-        QLabel* clockText = new QLabel("00:00", this);        
-        QPushButton* tapButton = new QPushButton(this);
+
+        QLabel* clockText = new QLabel("00:00", this);
+        QFont clockFont = clockText->font();
+        clockFont.setPointSize(72);
+        clockText->setFont(clockFont);
+        clockText->setAlignment(Qt::AlignCenter);
+
         QLabel* sprintName = new QLabel("", this);
+        QFont sprintFont = sprintName->font();
+        sprintFont.setPointSize(30);
+        sprintName->setFont(sprintFont);
+        sprintName->setAlignment(Qt::AlignCenter);
+
+
+        QPushButton* tapButton = new QPushButton(this);
 
         connect(tapButton, &QPushButton::clicked, []{
             services().engine().tap();
@@ -35,7 +53,11 @@ Befoxy::Befoxy(QWidget *parent)
     // icon
     bool hasIcon = QSystemTrayIcon::isSystemTrayAvailable();
     if (hasIcon) {
-        QSystemTrayIcon* icon = new QSystemTrayIcon(this);
+        auto dummyIconPath = sprintIconPathMap()(SprintType::Unknown);
+        QSystemTrayIcon* icon = new QSystemTrayIcon(QIcon(dummyIconPath), this);
+        connect(icon, &QSystemTrayIcon::activated, this, &Befoxy::trayIconActivated);
+        icon->show();
+
         m_trayIcon = icon;
     }
 
@@ -47,6 +69,33 @@ Befoxy::Befoxy(QWidget *parent)
 
         connect(timer, SIGNAL(timeout()), this, SLOT(updateVisual()));
         timer->start();
+    }
+
+    updateVisual();
+}
+
+void Befoxy::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    switch (reason) {
+    case QSystemTrayIcon::Trigger: {
+
+        //auto screenRect = QApplication::desktop()->screenGeometry();
+
+        auto foxyRect = this->geometry();
+
+        // tray at top right
+        //foxyRect.moveTo(m_trayIcon->geometry().bottomLeft());
+
+        //if (!screenRect.intersects(foxyRect)) break;
+
+        //foxyRect.moveTo(m_trayIcon->geometry().);
+
+        this->move(m_trayIcon->geometry().bottomRight() - QPoint(foxyRect.width(), 0));
+        this->show();
+        break;
+    }
+    case QSystemTrayIcon::Context: QApplication::instance()->quit(); break;
+    default:;
     }
 }
 
@@ -64,9 +113,11 @@ void Befoxy::updateVisual()
     }
     auto type = sprintTypeMap()(sprint.type);
     auto state = sprintStateMap()(sprint.state);
-    m_sprintName->setText(type + ": " + state);
+    m_sprintName->setText(QString("%1 (%2)").arg(type).arg(state));
 
     auto iconPath = sprintIconPathMap()(sprint.type);
     m_trayIcon->setIcon(QIcon(iconPath));
 
 }
+
+
