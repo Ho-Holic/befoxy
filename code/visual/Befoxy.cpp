@@ -6,6 +6,8 @@
 #include <QVBoxLayout>
 #include <core/Services.hpp>
 #include <core/Conversion.hpp>
+#include <visual/Conversion.hpp>
+#include <QSystemTrayIcon>
 
 Befoxy::Befoxy(QWidget *parent)
 :   QWidget(parent)
@@ -28,6 +30,13 @@ Befoxy::Befoxy(QWidget *parent)
 
         m_clockText = clockText;
         m_sprintName = sprintName;
+    }
+
+    // icon
+    bool hasIcon = QSystemTrayIcon::isSystemTrayAvailable();
+    if (hasIcon) {
+        QSystemTrayIcon* icon = new QSystemTrayIcon(this);
+        m_trayIcon = icon;
     }
 
     // update visual loop
@@ -56,4 +65,8 @@ void Befoxy::updateVisual()
     auto type = sprintTypeMap()(sprint.type);
     auto state = sprintStateMap()(sprint.state);
     m_sprintName->setText(type + ": " + state);
+
+    auto iconPath = sprintIconPathMap()(sprint.type);
+    m_trayIcon->setIcon(QIcon(iconPath));
+
 }

@@ -29,5 +29,9 @@ HEADERS  += visual/Befoxy.hpp \
     visual/Component.hpp \
     style/Guidelines.hpp \
     core/utility/MirrorMap.hpp \
-    core/Conversion.hpp
+    core/Conversion.hpp \
+    visual/Conversion.hpp
+
+RESOURCES += \
+    ../assets/icons/icons.qrc
 

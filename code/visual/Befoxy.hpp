@@ -4,6 +4,7 @@
 #include <QWidget>
 
 class QLabel;
+class QSystemTrayIcon;
 
 class Befoxy : public QWidget
 {
@@ -15,6 +16,7 @@ private slots:
 private:
     QLabel* m_clockText;
     QLabel* m_sprintName;
+    QSystemTrayIcon* m_trayIcon = nullptr;
 };
 
 #endif // BEFOXY_VISUAL_BEFOXY_HPP
