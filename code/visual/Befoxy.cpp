@@ -77,18 +77,42 @@ void Befoxy::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
     switch (reason) {
     case QSystemTrayIcon::Trigger: {
 
-        //auto screenRect = QApplication::desktop()->screenGeometry();
+        auto screenRect = QApplication::desktop()->screenGeometry();
 
         auto foxyRect = this->geometry();
+        auto trayRect = m_trayIcon->geometry();
+        auto foxySize = QPoint(foxyRect.width(), foxyRect.height());
 
-        // tray at top right
-        //foxyRect.moveTo(m_trayIcon->geometry().bottomLeft());
+        // 1. check tray at top right
+        foxyRect.moveTo(trayRect.bottomRight() - QPoint(foxyRect.width(), 0));
+        if (!screenRect.contains(foxyRect, true)) {
 
-        //if (!screenRect.intersects(foxyRect)) break;
+            // 2. check tray at bottom right
+            foxyRect.moveTo(trayRect.topRight() - foxySize);
 
-        //foxyRect.moveTo(m_trayIcon->geometry().);
+            if (!screenRect.contains(foxyRect, true)) {
 
-        this->move(m_trayIcon->geometry().bottomRight() - QPoint(foxyRect.width(), 0));
+                // 3. check tray at right bottom
+                //
+                // TODO: this condition not working because
+                // it 'bottom right' tray position is fine to
+                // We need some kind of best fit between two positions
+                //
+                foxyRect.moveTo(trayRect.bottomLeft() - foxySize);
+
+                if (!screenRect.contains(foxyRect, true)) {
+                    // 4. check tray at left bottom
+                    foxyRect.moveTo(trayRect.bottomRight() - QPoint(0, foxyRect.height()));
+                    if (!screenRect.contains(foxyRect, true)) {
+                        foxyRect.moveTo(screenRect.center() - foxySize / 2);
+                    }
+                }
+            }
+        }
+
+
+
+        this->move(foxyRect.topLeft());
         this->show();
         break;
     }
