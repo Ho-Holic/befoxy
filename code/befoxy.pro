@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     core/DataStorage.cpp \
     core/Engine.cpp \
     core/Services.cpp \
-    core/Conversion.cpp
+    core/Conversion.cpp \
+    visual/NewDayWatcher.cpp
 
 HEADERS  += visual/Befoxy.hpp \
     core/Serializer.hpp \
@@ -30,7 +31,8 @@ HEADERS  += visual/Befoxy.hpp \
     style/Guidelines.hpp \
     core/utility/MirrorMap.hpp \
     core/Conversion.hpp \
-    visual/Conversion.hpp
+    visual/Conversion.hpp \
+    visual/NewDayWatcher.hpp
 
 RESOURCES += \
     ../assets/icons/icons.qrc
