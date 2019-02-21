@@ -4,14 +4,12 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QApplication>
+#include <QDesktopWidget>
 #include <core/Services.hpp>
 #include <core/Conversion.hpp>
 #include <visual/Conversion.hpp>
-#include <QApplication>
-#include <QDesktopWidget>
-
-#include <QMessageBox>
-#include <QDebug>
+#include <visual/IconGenerator.hpp>
 
 Befoxy::Befoxy(QWidget *parent)
 :   QWidget(parent)
@@ -53,8 +51,8 @@ Befoxy::Befoxy(QWidget *parent)
     // icon
     bool hasIcon = QSystemTrayIcon::isSystemTrayAvailable();
     if (hasIcon) {
-        auto dummyIconPath = sprintIconPathMap()(SprintType::Unknown);
-        QSystemTrayIcon* icon = new QSystemTrayIcon(QIcon(dummyIconPath), this);
+        auto dummyIconColor = sprintIconColorMap()(SprintType::Unknown);
+        QSystemTrayIcon* icon = new QSystemTrayIcon(IconGenerator::generate(dummyIconColor), this);
         connect(icon, &QSystemTrayIcon::activated, this, &Befoxy::trayIconActivated);
         icon->show();
 
@@ -115,8 +113,8 @@ void Befoxy::updateVisual()
     auto state = sprintStateMap()(sprint.state);
     m_sprintName->setText(QString("%1 (%2)").arg(type).arg(state));
 
-    auto iconPath = sprintIconPathMap()(sprint.type);
-    m_trayIcon->setIcon(QIcon(iconPath));
+    auto iconColor = sprintIconColorMap()(sprint.type);
+    m_trayIcon->setIcon(IconGenerator::generate(iconColor));
 
 }
 
