@@ -1,0 +1,29 @@
+// config
+{
+  "workdayPattern": "+15s-5s+15s-5s",
+  "workdayStart": "23:00"
+}
+
+// history
+{  
+  "2019-02-21" : {    
+    "workdayPattern": "+15s-5s+15s-5s",
+    "workdayStart": "23:00",
+    "workdayEvents" : 2,
+    "workdayEvent_0": {
+      "tapTime" : "23:04",
+      "sprintDuration": "0s",
+      "sprintType" : "WorkdayStart",
+      "sprintState" : "Normal"
+    },
+    "workdayEvent_1": {
+      "tapTime" : "23:18",
+      "sprintDuration": "15s",
+      "sprintType": "Work",
+      "sprintState": "Overtime"
+    }
+  },
+  "2019-01-20" : {},
+}
+
+

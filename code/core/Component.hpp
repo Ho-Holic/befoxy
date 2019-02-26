@@ -38,28 +38,13 @@ struct Sprint
     SprintType type = SprintType::Unknown;
     SprintState state = SprintState::Normal;
     SprintTime time;
+    TimePoint tapTime;
 };
 
 struct Workday
 {
     TimePoint day;
     std::vector<Sprint> sprints;
-};
-
-struct History
-{
-    std::vector<Workday> workdays;
-};
-
-struct ColorScheme
-{
-    // clock background
-    // clock work
-    // clock rest
-    // clock timer work
-    // clock timer rest
-    // workday format
-    // workday background
 };
 
 struct Config

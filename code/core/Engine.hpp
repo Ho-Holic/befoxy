@@ -14,13 +14,15 @@ public:
 public:
   Sprint sprint() const;
   void tap();
-  void skip();  
-  const Workday& workday() const;
+  void skip();    
+  const std::vector<Sprint> finishedSprints() const;
+  void cleanFinishedSprints();
 
 private:  
   Workday m_ideal;
   Workday m_current;
   TimePoint m_sprintEnd;
+  std::vector<Sprint> m_finishedSprints;
 };
 
 #endif // BEFOXY_CORE_ENGINE_HPP

@@ -7,14 +7,15 @@
 class DataStorage
 {
 public:
+    void save();
+public:
   void setStoragePath(const QString& storagePath);
-  void serialize();
+  QString serialize();
   void deserialize();
   Workday& idealWorkday();
 private:
   QString m_storagePath;
-  Workday m_idealWorkday;
-  History m_history;
+  Workday m_idealWorkday;  
   Config m_config;
 };
 

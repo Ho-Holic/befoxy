@@ -30,5 +30,10 @@ Workday parseWorkday(const QString& data)
     return {};
 }
 
+SprintTime parseSprintTime(const QString& data)
+{
+    return {};
+}
+
 #endif // BEFOXY_CORE_SERIALIZER_HPP
 

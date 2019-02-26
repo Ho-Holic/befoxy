@@ -68,9 +68,11 @@ void Engine::tap()
     if (hasOvertime) {
 
         // add overtime sprint
-        if (!m_current.sprints.empty()) {
+        if (!m_current.sprints.empty())
+        {
             Sprint overtimeSprint = sprint();
             m_current.sprints.push_back(overtimeSprint);
+            m_finishedSprints.push_back(overtimeSprint);
         }
 
         // add next real sprint
@@ -92,8 +94,7 @@ void Engine::skip()
     // you need to track skips in analytics too
 }
 
-const Workday& Engine::workday() const
-{        
-    return m_current;
+const std::vector<Sprint> Engine::finishedSprints() const
+{
+    return m_finishedSprints;
 }
-
