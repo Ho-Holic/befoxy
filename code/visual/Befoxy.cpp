@@ -10,6 +10,7 @@
 #include <core/Conversion.hpp>
 #include <visual/Conversion.hpp>
 #include <visual/IconGenerator.hpp>
+#include <visual/TapLabel.hpp>
 
 Befoxy::Befoxy(QWidget *parent)
 :   QWidget(parent)
@@ -21,21 +22,33 @@ Befoxy::Befoxy(QWidget *parent)
         QVBoxLayout* layout = new QVBoxLayout(this);
 
         QLabel* clockText = new QLabel("00:00", this);
-        QFont clockFont = clockText->font();
-        clockFont.setPointSize(72);
-        clockText->setFont(clockFont);
         clockText->setAlignment(Qt::AlignCenter);
+        {
+            QFont clockFont = clockText->font();
+            clockFont.setPointSize(72);
+            clockFont.setWeight(QFont::Bold);
+            clockText->setFont(clockFont);
+        }
 
         QLabel* sprintName = new QLabel("", this);
-        QFont sprintFont = sprintName->font();
-        sprintFont.setPointSize(30);
-        sprintName->setFont(sprintFont);
         sprintName->setAlignment(Qt::AlignCenter);
+        {
+            QFont sprintFont = sprintName->font();
+            sprintFont.setPointSize(30);
+            sprintFont.setWeight(QFont::Light);
+            sprintName->setFont(sprintFont);
+        }
 
+        TapLabel* tapButton = new TapLabel("[ tap ]", this);
+        tapButton->setAlignment(Qt::AlignCenter);
+        {
+            QFont tapFont = tapButton->font();
+            tapFont.setPointSize(48);
+            tapFont.setWeight(QFont::DemiBold);
+            tapButton->setFont(tapFont);
+        }
 
-        QPushButton* tapButton = new QPushButton(this);
-
-        connect(tapButton, &QPushButton::clicked, []{
+        connect(tapButton, &TapLabel::clicked, []{
             services().engine().tap();
         });
 
@@ -137,9 +150,10 @@ void Befoxy::updateVisual()
     auto state = sprintStateMap()(sprint.state);
     m_sprintName->setText(QString("%1 (%2)").arg(type).arg(state));
 
-    auto iconColor = sprintIconColorMap()(sprint.type);
-    m_trayIcon->setIcon(IconGenerator::generate(iconColor));
-
+    if (m_trayIcon) {
+        auto iconColor = sprintIconColorMap()(sprint.type);
+        m_trayIcon->setIcon(IconGenerator::generate(iconColor));
+    }
 }
 
 

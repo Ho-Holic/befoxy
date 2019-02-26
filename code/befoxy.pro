@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     core/Services.cpp \
     core/Conversion.cpp \
     visual/NewDayWatcher.cpp \
-    visual/IconGenerator.cpp
+    visual/IconGenerator.cpp \
+    visual/TapLabel.cpp
 
 HEADERS  += visual/Befoxy.hpp \
     core/Serializer.hpp \
@@ -34,5 +35,6 @@ HEADERS  += visual/Befoxy.hpp \
     core/Conversion.hpp \
     visual/Conversion.hpp \
     visual/NewDayWatcher.hpp \
-    visual/IconGenerator.hpp
+    visual/IconGenerator.hpp \
+    visual/TapLabel.hpp
 
