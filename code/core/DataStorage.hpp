@@ -8,10 +8,9 @@ class DataStorage
 {
 public:
     void save();
+    void load();
 public:
-  void setStoragePath(const QString& storagePath);
-  QString serialize();
-  void deserialize();
+  void setStoragePath(const QString& storagePath);    
   Workday& idealWorkday();
 private:
   QString m_storagePath;

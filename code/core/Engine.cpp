@@ -98,3 +98,8 @@ const std::vector<Sprint> Engine::finishedSprints() const
 {
     return m_finishedSprints;
 }
+
+void Engine::cleanFinishedSprints()
+{
+    m_finishedSprints.clear();
+}

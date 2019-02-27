@@ -38,7 +38,8 @@ struct Sprint
     SprintType type = SprintType::Unknown;
     SprintState state = SprintState::Normal;
     SprintTime time;
-    TimePoint tapTime;
+    TimePoint startTime;
+    TimePoint finishTime;
 };
 
 struct Workday
@@ -49,7 +50,7 @@ struct Workday
 
 struct Config
 {
-    float sprintSwitchThresholdSec = 3.0;
+    float sprintSwitchThresholdSec = 3.0;    
 };
 
 #endif // BEFOXY_CORE_COMPONENT

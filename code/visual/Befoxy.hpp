@@ -5,12 +5,15 @@
 #include <QSystemTrayIcon>
 
 class QLabel;
+class QPaintEvent;
 
 class Befoxy : public QWidget
 {
     Q_OBJECT
 public:
     Befoxy(QWidget* parent = nullptr);
+protected:
+    void paintEvent(QPaintEvent* event);
 private slots:
     void updateVisual();
     void trayIconActivated(QSystemTrayIcon::ActivationReason);

@@ -50,6 +50,7 @@ Befoxy::Befoxy(QWidget *parent)
 
         connect(tapButton, &TapLabel::clicked, []{
             services().engine().tap();
+            services().dataStorage().save();
         });
 
         layout->addWidget(clockText);
@@ -83,6 +84,16 @@ Befoxy::Befoxy(QWidget *parent)
     }
 
     updateVisual();
+}
+
+void Befoxy::paintEvent(QPaintEvent* event)
+{
+    QPainter p(this);
+    QPen pen = p.pen();
+    pen.setWidth(8);
+    p.setPen(pen);
+    p.drawRect(0, 0, width(), height());
+    QWidget::paintEvent(event);
 }
 
 void Befoxy::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
