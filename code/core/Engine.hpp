@@ -15,8 +15,7 @@ public:
   Sprint sprint() const;
   void tap();
   void skip();    
-  const std::vector<Sprint> finishedSprints() const;
-  void cleanFinishedSprints();
+  const std::vector<Sprint> currentSprints() const;
 
 private:  
   Workday m_ideal;

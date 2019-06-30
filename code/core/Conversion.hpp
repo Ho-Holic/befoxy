@@ -30,12 +30,12 @@ static auto sprintStateMap()
     return cache;
 }
 
-static auto sprintTime(const SprintTime& time)
+static auto sprintTimeMap(const SprintTime& time)
 {
     return QString("%1:%2:%3").arg(time.hour).arg(time.min).arg(time.sec);
 }
 
-static auto sprintTime(const QString& time)
+static auto sprintTimeMap(const QString& time)
 {
 
     auto splitted = time.split(":");
@@ -48,6 +48,21 @@ static auto sprintTime(const QString& time)
     auto s = splitted[2].toInt();
 
     return SprintTime{h, m, s};
+}
+
+static auto timePointMap(const TimePoint& timePoint)
+{
+    return QString("%1").arg(timePoint.time_since_epoch().count());
+}
+
+static auto timePointMap(const QString& timePoint)
+{
+    static_assert (std::is_same<Clock::duration::rep, long long>::value, "Clock precision loss!");
+
+    Clock::duration::rep ns = timePoint.toLongLong();
+    TimePoint::duration duration(ns);
+
+    return TimePoint(duration);
 }
 
 #endif // BEFOXY_CORE_CONVERSION_HPP

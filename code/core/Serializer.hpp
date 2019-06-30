@@ -35,7 +35,7 @@ struct Serializer<Engine>
 {
     static void write(const Engine& value, QJsonObject& root)
     {
-        root["finishedSprints"] = writeObject(value.finishedSprints());
+        root["currentSprints"] = writeObject(value.currentSprints());
     }
 
     static void read(const QJsonObject&, Engine&)
@@ -69,9 +69,9 @@ struct Serializer<Sprint>
     {
         root["type"] = sprintTypeMap()(value.type);
         root["state"] = sprintStateMap()(value.state);
-        root["time"] = sprintTime(value.time);
-        //root["startTime"] = value.;
-        //root["finishTime"] = value.;
+        root["time"] = sprintTimeMap(value.time);
+        root["startTime"] = timePointMap(value.startTime);
+        root["finishTime"] = timePointMap(value.finishTime);
     }
 
     static void read(const QJsonObject&, Sprint&)
@@ -83,7 +83,7 @@ struct Serializer<Sprint>
 template <>
 struct Serializer<Workday>
 {
-    static void write(const Workday&, QJsonObject& object)
+    static void write(const Workday&, QJsonObject&)
     {
         // some body
     }
@@ -94,13 +94,13 @@ struct Serializer<Workday>
     }
 };
 
-Workday parseWorkday(const QString& data)
+Workday parseWorkday(const QString&)
 {
     // parse format '(+35m -10m) * 4 -1h + (+35m -10m) * 4'
     return {};
 }
 
-SprintTime parseSprintTime(const QString& data)
+SprintTime parseSprintTime(const QString&)
 {
     return {};
 }

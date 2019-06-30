@@ -71,8 +71,7 @@ void Engine::tap()
         if (!m_current.sprints.empty())
         {
             Sprint overtimeSprint = sprint();
-            m_current.sprints.push_back(overtimeSprint);
-            m_finishedSprints.push_back(overtimeSprint);
+            m_current.sprints.push_back(overtimeSprint);            
         }
 
         // add next real sprint
@@ -94,12 +93,7 @@ void Engine::skip()
     // you need to track skips in analytics too
 }
 
-const std::vector<Sprint> Engine::finishedSprints() const
+const std::vector<Sprint> Engine::currentSprints() const
 {
-    return m_finishedSprints;
-}
-
-void Engine::cleanFinishedSprints()
-{
-    m_finishedSprints.clear();
+    return m_current.sprints;
 }
