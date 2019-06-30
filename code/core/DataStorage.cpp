@@ -3,6 +3,7 @@
 #include <QFile>
 #include <QJsonParseError>
 #include <QJsonDocument>
+#include <core/Serializer.hpp>
 
 namespace {
     Workday fakeWorkday()
@@ -26,26 +27,20 @@ void DataStorage::save()
     QString sprintHistoryFileName = "sprintHistory.json";
 
     QFile sprintHistory(m_storagePath + "/" + sprintHistoryFileName);
-    if ( ! sprintHistory.open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if ( ! sprintHistory.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
         // TODO: Somehow take care of unsaved sprints
         return;
-    }
+    }    
 
-    QJsonParseError error;
-    QJsonDocument document = QJsonDocument::fromJson(sprintHistory.readAll(), &error);
+    {        
+        QJsonObject object;
+        Serializer<Engine>::write(services().engine(), object);
+
+        QJsonDocument document(object);
+        sprintHistory.write(document.toJson());
+    }    
+
     sprintHistory.close();
-
-
-    {
-        auto finishedSprints = services().engine().finishedSprints();
-        services().engine().cleanFinishedSprints();
-        // TODO: Write data here
-    }
-
-    QFile newSprintHistory(m_storagePath + "/" + sprintHistoryFileName);
-    newSprintHistory.open(QFile::WriteOnly | QFile::Text | QFile::Truncate);
-    newSprintHistory.write(document.toJson());
-    newSprintHistory.close();
 }
 
 void DataStorage::setStoragePath(const QString& storagePath)
@@ -57,6 +52,7 @@ void DataStorage::load()
 {
     // fake
     m_idealWorkday = fakeWorkday();
+    services().engine().init(m_idealWorkday);
 }
 
 Workday& DataStorage::idealWorkday()

@@ -25,8 +25,7 @@ int main(int argc, char *argv[])
       }
   }
 
-  services().dataStorage().load();
-  services().engine().init(services().dataStorage().idealWorkday());
+  services().dataStorage().load();  
 
   Befoxy w;
   w.resize(320, 320);
