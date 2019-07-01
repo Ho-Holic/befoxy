@@ -67,11 +67,11 @@ struct Serializer<Sprint>
 {
     static void write(const Sprint& value, QJsonObject& root)
     {
-        root["type"] = sprintTypeMap()(value.type);
-        root["state"] = sprintStateMap()(value.state);
+        root["type"] = sprintTypeMap()(value.type);        
         root["time"] = sprintTimeMap(value.time);
         root["startTime"] = timePointMap(value.startTime);
         root["finishTime"] = timePointMap(value.finishTime);
+        root["actualFinishTime"] = timePointMap(value.actualFinishTime);
     }
 
     static void read(const QJsonObject&, Sprint&)
@@ -97,11 +97,6 @@ struct Serializer<Workday>
 Workday parseWorkday(const QString&)
 {
     // parse format '(+35m -10m) * 4 -1h + (+35m -10m) * 4'
-    return {};
-}
-
-SprintTime parseSprintTime(const QString&)
-{
     return {};
 }
 

@@ -1,6 +1,7 @@
 #include "Engine.hpp"
 #include "style/Guidelines.hpp"
 #include <algorithm>
+#include "core/Methods.hpp"
 
 Engine::Engine()
 :   m_ideal()
@@ -13,13 +14,14 @@ void Engine::init(const Workday& idealWorkday)
 {
     // clean up
     m_ideal.sprints.clear();
-    m_current.sprints.clear();
-    m_sprintEnd = TimePoint();
+    m_current.sprints.clear();    
 
     // make a stack from ideal workday
     m_ideal = idealWorkday;
     std::reverse(m_ideal.sprints.begin(), m_ideal.sprints.end());
-    tap(); // initial tap
+
+    auto now = Clock::now();
+    activateNextSprint(now);
 }
 
 Sprint Engine::sprint() const
@@ -29,12 +31,13 @@ Sprint Engine::sprint() const
     require(!m_current.sprints.empty());
 
     auto sprintCopy = m_current.sprints.back();
+    auto sprintEnd = sprintCopy.finishTime;
 
-    if (sprintCopy.type != SprintType::WorkdayStart) {
+    if (sprintCopy.type != SprintType::WorkdayStart && sprintCopy.type != SprintType::WorkdayEnd) {
 
         auto now = Clock::now();
-        bool hasOvertime = now > m_sprintEnd;
-        auto diff = (!hasOvertime) ? (m_sprintEnd - now) : (now - m_sprintEnd);
+        bool hasOvertime = now > sprintEnd;
+        auto diff = (!hasOvertime) ? (sprintEnd - now) : (now - sprintEnd);
 
         sprintCopy.time.hour = duration_cast<hours>(diff).count();
 
@@ -57,33 +60,17 @@ void Engine::tap()
     // tap to affect sprint: start/pause/continue
     using namespace std::chrono;
 
-    if (m_ideal.sprints.empty()) return;
-
-    require(!m_ideal.sprints.empty());
-
+    if (m_current.sprints.empty()) return;
 
     auto now = Clock::now();
+    auto sprintEnd = m_current.sprints.back().finishTime;
 
-    bool hasOvertime = now > m_sprintEnd;
-    if (hasOvertime) {
+    bool hasEnded = (now >= sprintEnd);
+    if (hasEnded) {
 
-        // add overtime sprint
-        if (!m_current.sprints.empty())
-        {
-            Sprint overtimeSprint = sprint();
-            m_current.sprints.push_back(overtimeSprint);            
-        }
+        m_current.sprints.back().actualFinishTime = now;
 
-        // add next real sprint
-        auto sprint = m_ideal.sprints.back();
-        m_ideal.sprints.pop_back();
-        m_current.sprints.push_back(sprint);
-
-
-        m_sprintEnd = now
-                + hours(sprint.time.hour)
-                + minutes(sprint.time.min)
-                + seconds(sprint.time.sec);
+        activateNextSprint(now);
     }
 }
 
@@ -96,4 +83,16 @@ void Engine::skip()
 const std::vector<Sprint> Engine::currentSprints() const
 {
     return m_current.sprints;
+}
+
+void Engine::activateNextSprint(const TimePoint& startTime)
+{
+    if (m_ideal.sprints.empty()) return;
+
+    auto sprint = m_ideal.sprints.back();
+    sprint.startTime = startTime;
+    sprint.finishTime = sprint.startTime + sprint.time;
+
+    m_ideal.sprints.pop_back();
+    m_current.sprints.push_back(sprint);
 }

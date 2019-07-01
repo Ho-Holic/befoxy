@@ -1,5 +1,5 @@
-#ifndef BEFOXY_CORE_COMPONENT
-#define BEFOXY_CORE_COMPONENT
+#ifndef BEFOXY_CORE_COMPONENT_HPP
+#define BEFOXY_CORE_COMPONENT_HPP
 
 #include <vector>
 #include <cstdint>
@@ -40,6 +40,7 @@ struct Sprint
     SprintTime time;
     TimePoint startTime;
     TimePoint finishTime;
+    TimePoint actualFinishTime;
 };
 
 struct Workday
@@ -53,5 +54,5 @@ struct Config
     float sprintSwitchThresholdSec = 3.0;    
 };
 
-#endif // BEFOXY_CORE_COMPONENT
+#endif // BEFOXY_CORE_COMPONENT_HPP
 

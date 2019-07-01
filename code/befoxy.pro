@@ -36,5 +36,6 @@ HEADERS  += visual/Befoxy.hpp \
     visual/Conversion.hpp \
     visual/NewDayWatcher.hpp \
     visual/IconGenerator.hpp \
-    visual/TapLabel.hpp
+    visual/TapLabel.hpp \
+    core/Methods.hpp
 

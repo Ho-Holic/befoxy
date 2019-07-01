@@ -11,17 +11,19 @@ public:
   Engine();
 public:
   void init(const Workday& idealWorkday);
+
 public:
   Sprint sprint() const;
   void tap();
   void skip();    
   const std::vector<Sprint> currentSprints() const;
 
+private:
+  void activateNextSprint(const TimePoint& startTime);
+
 private:  
   Workday m_ideal;
-  Workday m_current;
-  TimePoint m_sprintEnd;
-  std::vector<Sprint> m_finishedSprints;
+  Workday m_current;  
 };
 
 #endif // BEFOXY_CORE_ENGINE_HPP
