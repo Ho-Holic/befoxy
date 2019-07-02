@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     core/Conversion.cpp \
     visual/NewDayWatcher.cpp \
     visual/IconGenerator.cpp \
-    visual/TapLabel.cpp
+    visual/TapLabel.cpp \
+    visual/ColorScheme.cpp
 
 HEADERS  += visual/Befoxy.hpp \
     core/Serializer.hpp \
@@ -37,5 +38,6 @@ HEADERS  += visual/Befoxy.hpp \
     visual/NewDayWatcher.hpp \
     visual/IconGenerator.hpp \
     visual/TapLabel.hpp \
-    core/Methods.hpp
+    core/Methods.hpp \
+    visual/ColorScheme.hpp
 

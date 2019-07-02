@@ -20,6 +20,7 @@ private slots:
 private:
     QLabel* m_clockText;
     QLabel* m_sprintName;
+    QLabel* m_tapButton;
     QSystemTrayIcon* m_trayIcon = nullptr;
 };
 
