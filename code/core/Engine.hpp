@@ -17,6 +17,7 @@ public:
   void tap();
   void skip();    
   const std::vector<Sprint> currentSprints() const;
+  WorkProgress workProgress() const;
 
 private:
   void activateNextSprint(const TimePoint& startTime);

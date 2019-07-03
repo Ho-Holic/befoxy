@@ -1,7 +1,7 @@
 #include "Engine.hpp"
-#include "style/Guidelines.hpp"
+#include <style/Guidelines.hpp>
 #include <algorithm>
-#include "core/Methods.hpp"
+#include <core/Methods.hpp>
 
 Engine::Engine()
 :   m_ideal()
@@ -83,6 +83,18 @@ void Engine::skip()
 const std::vector<Sprint> Engine::currentSprints() const
 {
     return m_current.sprints;
+}
+
+WorkProgress Engine::workProgress() const
+{
+    auto left = std::count_if(m_ideal.sprints.begin(), m_ideal.sprints.end(), &isImportantSprint);
+    auto done = std::count_if(m_current.sprints.begin(), m_current.sprints.end(), &isImportantSprint);
+
+    require(done <= (left + done));
+    require(left >= 0);
+    require(done >= 0);
+
+    return { done, left + done};
 }
 
 void Engine::activateNextSprint(const TimePoint& startTime)

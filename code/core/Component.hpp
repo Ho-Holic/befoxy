@@ -46,7 +46,13 @@ struct Sprint
 struct Workday
 {
     TimePoint day;
-    std::vector<Sprint> sprints;
+    std::vector<Sprint> sprints;    
+};
+
+struct WorkProgress
+{
+    int32_t current = 0;
+    int32_t maximum = 0;
 };
 
 struct Config

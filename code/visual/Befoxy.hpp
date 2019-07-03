@@ -21,6 +21,7 @@ private:
     QLabel* m_clockText;
     QLabel* m_sprintName;
     QLabel* m_tapButton;
+    QLabel* m_progress;
     QSystemTrayIcon* m_trayIcon = nullptr;
 };
 

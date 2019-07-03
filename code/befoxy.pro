@@ -39,5 +39,6 @@ HEADERS  += visual/Befoxy.hpp \
     visual/IconGenerator.hpp \
     visual/TapLabel.hpp \
     core/Methods.hpp \
-    visual/ColorScheme.hpp
+    visual/ColorScheme.hpp \
+    style/Backport.hpp
 

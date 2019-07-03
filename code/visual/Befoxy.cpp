@@ -22,6 +22,14 @@ namespace
                               ColorScheme::valueFor(role));
         label->setPalette(clockPalette);
     }
+
+    void setLabelFont(QLabel* label, int pointSize, int weight)
+    {
+        QFont font = label->font();
+        font.setPointSize(pointSize);
+        font.setWeight(weight);
+        label->setFont(font);
+    }
 }
 
 Befoxy::Befoxy(QWidget *parent)
@@ -34,36 +42,31 @@ Befoxy::Befoxy(QWidget *parent)
         QVBoxLayout* layout = new QVBoxLayout(this);
 
         QLabel* clockText = new QLabel("00:00", this);
-        clockText->setAlignment(Qt::AlignCenter);
-        {
-            QFont clockFont = clockText->font();
-            clockFont.setPointSize(72);
-            clockFont.setWeight(QFont::Bold);
-            clockText->setFont(clockFont);
-
+        {            
+            clockText->setAlignment(Qt::AlignCenter);
+            setLabelFont(clockText, QFont::Bold, 72);
             setLabelColor(clockText, ColorRole::AccentCurrent);
         }
 
         QLabel* sprintName = new QLabel("", this);
-        sprintName->setAlignment(Qt::AlignCenter);
-        {
-            QFont sprintFont = sprintName->font();
-            sprintFont.setPointSize(30);
-            sprintFont.setWeight(QFont::Light);
-            sprintName->setFont(sprintFont);
-
+        {            
+            sprintName->setAlignment(Qt::AlignCenter);
+            setLabelFont(sprintName, QFont::Light, 30);
             setLabelColor(sprintName, ColorRole::AccentCurrent);
         }
 
         TapLabel* tapButton = new TapLabel("[ tap ]", this);
-        tapButton->setAlignment(Qt::AlignCenter);
         {
-            QFont tapFont = tapButton->font();
-            tapFont.setPointSize(48);
-            tapFont.setWeight(QFont::DemiBold);
-            tapButton->setFont(tapFont);            
-
+            tapButton->setAlignment(Qt::AlignCenter);
+            setLabelFont(tapButton, QFont::DemiBold, 48);
             setLabelColor(tapButton, ColorRole::AccentCurrent);
+        }
+
+        QLabel* progress = new QLabel("", this);
+        {
+            progress->setAlignment(Qt::AlignCenter);
+            setLabelFont(progress, QFont::Light, 30);
+            setLabelColor(progress, ColorRole::AccentCurrent);
         }
 
         connect(tapButton, &TapLabel::clicked, []{
@@ -74,11 +77,13 @@ Befoxy::Befoxy(QWidget *parent)
         layout->addWidget(clockText);
         layout->addWidget(sprintName);
         layout->addWidget(tapButton);
+        layout->addWidget(progress);
 
 
         m_clockText = clockText;
         m_sprintName = sprintName;
         m_tapButton = tapButton;
+        m_progress = progress;
     }
 
     // icon
@@ -177,7 +182,8 @@ void Befoxy::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 
 void Befoxy::updateVisual()
 {    
-    auto sprint = services().engine().sprint();
+    auto sprint = services().engine().sprint();    
+
     if (sprint.time.hour > 0) {
         m_clockText->setText(QString("%1:%2")
             .arg(sprint.time.hour, 2, 10, QChar('0'))
@@ -191,6 +197,12 @@ void Befoxy::updateVisual()
     auto state = sprintStateMap()(sprint.state);
     m_sprintName->setText(QString("%1 (%2)").arg(type).arg(state));
 
+    // update progress
+    {
+        auto progress = services().engine().workProgress();
+        m_progress->setText(QString("%1 / %2").arg(progress.current).arg(progress.maximum));
+    }
+
     // updateColors
     {
         switch (sprint.type) {
@@ -201,12 +213,15 @@ void Befoxy::updateVisual()
         setLabelColor(m_clockText, ColorRole::AccentCurrent);
         setLabelColor(m_sprintName, ColorRole::AccentCurrent);
         setLabelColor(m_tapButton, ColorRole::AccentCurrent);
+        setLabelColor(m_progress, ColorRole::AccentCurrent);
 
         if (m_trayIcon) {
             auto iconColor = sprintIconColorMap()(sprint.type);
             m_trayIcon->setIcon(IconGenerator::generate(iconColor));
         }
     }
+
+
 
     update(); // we want to trigger a paintEvent to color background and outline
 }
