@@ -4,9 +4,10 @@
 #include <QJsonParseError>
 #include <QJsonDocument>
 #include <core/Serializer.hpp>
+#include <QDebug>
 
 namespace {
-    Workday fakeWorkday()
+    Workday firstRunWorkday()
     {
         std::vector<Sprint> w = {
             { SprintType::WorkdayStart, SprintState::Normal, {0, 0, 0}, {}, {}, {} },
@@ -22,11 +23,19 @@ namespace {
     }
 }
 
-void DataStorage::save()
+void DataStorage::setStoragePath(const QString& storagePath)
 {
-    QString sprintHistoryFileName = "sprintHistory.json";
+    m_storagePath = storagePath;
+}
 
-    QFile sprintHistory(m_storagePath + "/" + sprintHistoryFileName);
+QString DataStorage::sprintHistoryFilePath()
+{
+    return m_storagePath + "sprintHistory.json";
+}
+
+void DataStorage::save()
+{    
+    QFile sprintHistory(sprintHistoryFilePath());
     if ( ! sprintHistory.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
         // TODO: Somehow take care of unsaved sprints
         return;
@@ -43,20 +52,31 @@ void DataStorage::save()
     sprintHistory.close();
 }
 
-void DataStorage::setStoragePath(const QString& storagePath)
-{
-    m_storagePath = storagePath;
-}
 
 void DataStorage::load()
 {
-    // fake
-    m_idealWorkday = fakeWorkday();
-    services().engine().init(m_idealWorkday);
+    QFile sprintHistory(sprintHistoryFilePath());
+
+    if ( ! sprintHistory.open(QIODevice::ReadOnly | QIODevice::Text)) {
+
+        services().engine().init(firstRunWorkday());
+        return;
+    }
+
+    QByteArray saveData = sprintHistory.readAll();
+    QJsonParseError parseError;
+    QJsonDocument document(QJsonDocument::fromJson(saveData, &parseError));
+
+    if (parseError.error != QJsonParseError::NoError) {
+
+        qDebug() << parseError.errorString();
+        services().engine().init(firstRunWorkday());
+        return;
+    }
+
+    Serializer<Engine>::read(document.object(), services().engine());
 }
 
-Workday& DataStorage::idealWorkday()
-{
-    return m_idealWorkday;
-}
+
+
 

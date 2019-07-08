@@ -35,30 +35,47 @@ struct Serializer<Engine>
 {
     static void write(const Engine& value, QJsonObject& root)
     {
-        root["currentSprints"] = writeObject(value.currentSprints());
+        root["idealWorkday"] = writeObject(value.idealSprints());
+        root["currentWorkday"] = writeObject(value.currentSprints());
     }
 
-    static void read(const QJsonObject&, Engine&)
+    static void read(const QJsonObject& root, Engine& value)
     {
-        // some body
+        // TODO: implement Workday serialization
+        auto idealWorkday = readObject<std::vector<Sprint>>(root["idealWorkday"].toObject());
+        auto currentWorkday = readObject<std::vector<Sprint>>(root["currentWorkday"].toObject());
+
+        value.init(Workday{{}, idealWorkday}, Workday{{}, currentWorkday});
     }
 };
 
 template <typename T>
 struct Serializer<std::vector<T>>
 {
+    static QString key(size_t index) {
+        return QString("key_%1").arg(index);
+    }
+
     static void write(const std::vector<T>& value, QJsonObject& root)
     {
         for (size_t i = 0; i < value.size(); ++i) {
 
-            QString key = QString("key_%1").arg(i);
-            root[key] = writeObject(value[i]);
+            root[key(i)] = writeObject(value[i]);
         }
+        root["size"] = static_cast<int>(value.size());
     }
 
-    static void read(const QJsonObject&, std::vector<T>&)
+    static void read(const QJsonObject& root, std::vector<T>& value)
     {
-        // some body
+        int maybeSize = root["size"].toInt();
+        if (maybeSize > 0) {
+
+            for (size_t i = 0; i < static_cast<size_t>(maybeSize); ++i) {
+
+                auto object = root[key(i)].toObject();
+                value.push_back(readObject<T>(object));
+            }
+        }
     }
 };
 
@@ -74,9 +91,13 @@ struct Serializer<Sprint>
         root["actualFinishTime"] = timePointMap(value.actualFinishTime);
     }
 
-    static void read(const QJsonObject&, Sprint&)
+    static void read(const QJsonObject& root, Sprint& value)
     {
-        // some body
+        value.type= sprintTypeMap()(root["type"].toString());
+        value.time = sprintTimeMap(root["time"].toString());
+        value.startTime = timePointMap(root["startTime"].toString());
+        value.finishTime = timePointMap(root["finishTime"].toString());
+        value.actualFinishTime = timePointMap(root["actualFinishTime"].toString());
     }
 };
 

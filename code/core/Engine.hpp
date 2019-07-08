@@ -11,12 +11,14 @@ public:
   Engine();
 public:
   void init(const Workday& idealWorkday);
+  void init(const Workday& idealWorkday, const Workday& currentWorkday);
 
 public:
   Sprint sprint() const;
   void tap();
   void skip();    
   const std::vector<Sprint> currentSprints() const;
+  const std::vector<Sprint> idealSprints() const;
   WorkProgress workProgress() const;
 
 private:

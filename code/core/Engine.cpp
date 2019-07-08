@@ -12,6 +12,11 @@ Engine::Engine()
 
 void Engine::init(const Workday& idealWorkday)
 {
+    init(idealWorkday, {});
+}
+
+void Engine::init(const Workday& idealWorkday, const Workday& currentWorkday)
+{
     // clean up
     m_ideal.sprints.clear();
     m_current.sprints.clear();    
@@ -19,6 +24,8 @@ void Engine::init(const Workday& idealWorkday)
     // make a stack from ideal workday
     m_ideal = idealWorkday;
     std::reverse(m_ideal.sprints.begin(), m_ideal.sprints.end());
+
+    m_current = currentWorkday;
 
     auto now = Clock::now();
     activateNextSprint(now);
@@ -83,6 +90,13 @@ void Engine::skip()
 const std::vector<Sprint> Engine::currentSprints() const
 {
     return m_current.sprints;
+}
+
+const std::vector<Sprint> Engine::idealSprints() const
+{
+    auto sprintCopy = m_ideal.sprints;
+    std::reverse(sprintCopy.begin(), sprintCopy.end());
+    return sprintCopy;
 }
 
 WorkProgress Engine::workProgress() const

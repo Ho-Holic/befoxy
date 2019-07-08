@@ -6,16 +6,17 @@
 
 class DataStorage
 {
-public:
+public:    
     void save();
     void load();
 public:
-  void setStoragePath(const QString& storagePath);    
-  Workday& idealWorkday();
+  void setStoragePath(const QString& storagePath);      
 private:
-  QString m_storagePath;
-  Workday m_idealWorkday;  
+  QString sprintHistoryFilePath();
+private:
+  QString m_storagePath;  
   Config m_config;
+  QString m_sprintHistoryFileName;
 };
 
 #endif // BEFOXY_CORE_DATASTORAGE_HPP

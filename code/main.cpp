@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
       // TODO: make a loop trying to find already created confing inside this locations
       //
       if (!locations.empty()) {
-          QString befoxyHome = locations.front()+"/befoxy";
+          QString befoxyHome = locations.front()+"/befoxy/";
           QDir dir;
           if(!dir.exists(befoxyHome)) {
               dir.mkpath(befoxyHome);
