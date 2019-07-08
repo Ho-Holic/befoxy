@@ -21,6 +21,10 @@ void Engine::init(const Workday& idealWorkday, const Workday& currentWorkday)
     m_ideal.sprints.clear();
     m_current.sprints.clear();    
 
+    //
+    // TODO: make index based non destructive sprint advancing
+    //
+
     // make a stack from ideal workday
     m_ideal = idealWorkday;
     std::reverse(m_ideal.sprints.begin(), m_ideal.sprints.end());
