@@ -31,8 +31,10 @@ void Engine::init(const Workday& idealWorkday, const Workday& currentWorkday)
 
     m_current = currentWorkday;
 
-    auto now = Clock::now();
-    activateNextSprint(now);
+    if (m_current.sprints.empty()) {
+        auto now = Clock::now();
+        activateNextSprint(now);
+    }
 }
 
 Sprint Engine::sprint() const
