@@ -35,17 +35,16 @@ struct Serializer<Engine>
 {
     static void write(const Engine& value, QJsonObject& root)
     {
-        root["idealWorkday"] = writeObject(value.idealSprints());
-        root["currentWorkday"] = writeObject(value.currentSprints());
+        root["idealWorkday"] = writeObject(value.idealWorkday());
+        root["currentWorkday"] = writeObject(value.currentWorkday());
     }
 
     static void read(const QJsonObject& root, Engine& value)
-    {
-        // TODO: implement Workday serialization
-        auto idealWorkday = readObject<std::vector<Sprint>>(root["idealWorkday"].toObject());
-        auto currentWorkday = readObject<std::vector<Sprint>>(root["currentWorkday"].toObject());
+    {        
+        auto idealWorkday = readObject<Workday>(root["idealWorkday"].toObject());
+        auto currentWorkday = readObject<Workday>(root["currentWorkday"].toObject());
 
-        value.init(Workday{{}, idealWorkday}, Workday{{}, currentWorkday});
+        value.init(idealWorkday, currentWorkday);
     }
 };
 
@@ -104,14 +103,16 @@ struct Serializer<Sprint>
 template <>
 struct Serializer<Workday>
 {
-    static void write(const Workday&, QJsonObject&)
+    static void write(const Workday& value, QJsonObject& root)
     {
-        // some body
+        root["day"] = timePointMap(value.day);
+        root["sprints"] = writeObject(value.sprints);
     }
 
-    static void read(const QJsonObject&, Workday&)
+    static void read(const QJsonObject& root, Workday& value)
     {
-        // some body
+        value.day = timePointMap(root["day"].toString());
+        value.sprints = readObject<std::vector<Sprint>>(root["sprints"].toObject());
     }
 };
 

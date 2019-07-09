@@ -3,12 +3,18 @@
 
 #include <style/Guidelines.hpp>
 #include <functional>
+#include <chrono>
 
 // backport of std::clamp from C++17
+// backport of std::chrono::days from C++20
 
 namespace backport {
 
   namespace std {
+
+    namespace chrono {
+      using days = ::std::chrono::duration<int, ::std::ratio<86400>>;
+    }
 
     template<class T, class Compare>
     constexpr const T& clamp(const T& v, const T& lo, const T& hi, Compare comp) {

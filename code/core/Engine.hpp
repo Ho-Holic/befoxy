@@ -17,8 +17,8 @@ public:
   Sprint sprint() const;
   void tap();
   void skip();    
-  const std::vector<Sprint> currentSprints() const;
-  const std::vector<Sprint> idealSprints() const;
+  Workday currentWorkday() const;
+  Workday idealWorkday() const;
   WorkProgress workProgress() const;
 
 private:

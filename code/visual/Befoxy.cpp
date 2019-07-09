@@ -70,8 +70,8 @@ Befoxy::Befoxy(QWidget *parent)
         }
 
         connect(tapButton, &TapLabel::clicked, []{
-            services().engine().tap();
-            services().dataStorage().save();
+            service<Engine>().tap();
+            service<DataStorage>().save();
         });
 
         layout->addWidget(clockText);
@@ -182,7 +182,7 @@ void Befoxy::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 
 void Befoxy::updateVisual()
 {    
-    auto sprint = services().engine().sprint();    
+    auto sprint = service<Engine>().sprint();
 
     if (sprint.time.hour > 0) {
         m_clockText->setText(QString("%1:%2")
@@ -199,7 +199,7 @@ void Befoxy::updateVisual()
 
     // update progress
     {
-        auto progress = services().engine().workProgress();
+        auto progress = service<Engine>().workProgress();
         m_progress->setText(QString("%1 / %2").arg(progress.current).arg(progress.maximum));
     }
 

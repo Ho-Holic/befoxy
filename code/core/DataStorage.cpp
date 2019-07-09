@@ -5,6 +5,7 @@
 #include <QJsonDocument>
 #include <core/Serializer.hpp>
 #include <QDebug>
+#include <style/Backport.hpp>
 
 namespace {
     Workday firstRunWorkday()
@@ -19,7 +20,11 @@ namespace {
 
             { SprintType::WorkdayEnd,  SprintState::Normal, {0, 0, 0}, {}, {}, {} },
         };
-        return Workday { {}, w };
+
+        auto now = Clock::now();
+        auto startOfTheDay = std::chrono::time_point_cast<backport::std::chrono::days>(now);
+
+        return Workday { startOfTheDay, w };
     }
 }
 
@@ -29,29 +34,12 @@ void DataStorage::setStoragePath(const QString& storagePath)
 }
 
 QString DataStorage::sprintHistoryFilePath()
-{
-    return m_storagePath + "sprintHistory.json";
-}
-
-void DataStorage::save()
 {    
-    QFile sprintHistory(sprintHistoryFilePath());
-    if ( ! sprintHistory.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
-        // TODO: Somehow take care of unsaved sprints
-        return;
-    }    
-
-    {        
-        QJsonObject object;
-        Serializer<Engine>::write(services().engine(), object);
-
-        QJsonDocument document(object);
-        sprintHistory.write(document.toJson());
-    }    
-
-    sprintHistory.close();
+    auto now = Clock::now();
+    auto startOfTheDay = std::chrono::time_point_cast<backport::std::chrono::days>(now);
+    auto currentDay = timePointMap(startOfTheDay);
+    return m_storagePath + QString("sprintHistory_%1.json").arg(currentDay);
 }
-
 
 void DataStorage::load()
 {
@@ -59,7 +47,7 @@ void DataStorage::load()
 
     if ( ! sprintHistory.open(QIODevice::ReadOnly | QIODevice::Text)) {
 
-        services().engine().init(firstRunWorkday());
+        service<Engine>().init(firstRunWorkday());
         return;
     }
 
@@ -70,13 +58,28 @@ void DataStorage::load()
     if (parseError.error != QJsonParseError::NoError) {
 
         qDebug() << parseError.errorString();
-        services().engine().init(firstRunWorkday());
+        service<Engine>().init(firstRunWorkday());
         return;
     }
 
-    Serializer<Engine>::read(document.object(), services().engine());
+    Serializer<Engine>::read(document.object(), service<Engine>());
 }
 
+void DataStorage::save()
+{
+    QFile sprintHistory(sprintHistoryFilePath());
+    if ( ! sprintHistory.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
+        // TODO: Somehow take care of unsaved sprints
+        return;
+    }
 
+    {
+        QJsonObject object;
+        Serializer<Engine>::write(service<Engine>(), object);
 
+        QJsonDocument document(object);
+        sprintHistory.write(document.toJson());
+    }
 
+    sprintHistory.close();
+}

@@ -21,11 +21,11 @@ int main(int argc, char *argv[])
           if(!dir.exists(befoxyHome)) {
               dir.mkpath(befoxyHome);
           }
-          services().dataStorage().setStoragePath(befoxyHome);
+          service<DataStorage>().setStoragePath(befoxyHome);
       }
   }
 
-  services().dataStorage().load();  
+  service<DataStorage>().load();
 
   Befoxy w;
   w.resize(320, 320);

@@ -12,7 +12,10 @@ Engine::Engine()
 
 void Engine::init(const Workday& idealWorkday)
 {
-    init(idealWorkday, {});
+    Workday currentWorkday;
+    currentWorkday.day = idealWorkday.day;
+
+    init(idealWorkday, currentWorkday);
 }
 
 void Engine::init(const Workday& idealWorkday, const Workday& currentWorkday)
@@ -93,16 +96,16 @@ void Engine::skip()
     // you need to track skips in analytics too
 }
 
-const std::vector<Sprint> Engine::currentSprints() const
+Workday Engine::currentWorkday() const
 {
-    return m_current.sprints;
+    return m_current;
 }
 
-const std::vector<Sprint> Engine::idealSprints() const
+Workday Engine::idealWorkday() const
 {
-    auto sprintCopy = m_ideal.sprints;
-    std::reverse(sprintCopy.begin(), sprintCopy.end());
-    return sprintCopy;
+    auto workdayCopy = m_ideal;
+    std::reverse(workdayCopy.sprints.begin(), workdayCopy.sprints.end());
+    return workdayCopy;
 }
 
 WorkProgress Engine::workProgress() const

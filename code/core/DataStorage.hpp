@@ -7,8 +7,8 @@
 class DataStorage
 {
 public:    
-    void save();
     void load();
+    void save();
 public:
   void setStoragePath(const QString& storagePath);      
 private:

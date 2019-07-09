@@ -17,4 +17,22 @@ private:
 
 Services& services();
 
+//
+// TODO: write proper services with 'get/set' methods and type erasure
+//
+template <typename T>
+inline T& service(); // Supposed to be used as specialization now and link error if not
+
+template <>
+inline DataStorage& service<DataStorage>()
+{
+    return services().dataStorage();
+}
+
+template <>
+inline Engine& service<Engine>()
+{
+    return services().engine();
+}
+
 #endif // BEFOXY_CORE_SERVICES_HPP
