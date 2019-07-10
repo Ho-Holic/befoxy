@@ -13,9 +13,14 @@ public:
   void setStoragePath(const QString& storagePath);      
 private:
   QString sprintHistoryFilePath();
+  QString settingsFilePath();
+  Workday firstRunWorkday();
 private:
-  QString m_storagePath;  
-  Config m_config;
+  void saveDefaultSettings();
+  // void loadSettings(); // TODO: later, now this is too much
+  // void saveSettings(); // TODO: later, now this is too much
+private:
+  QString m_storagePath;    
   QString m_sprintHistoryFileName;
 };
 

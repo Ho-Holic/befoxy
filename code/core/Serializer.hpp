@@ -92,7 +92,7 @@ struct Serializer<Sprint>
 
     static void read(const QJsonObject& root, Sprint& value)
     {
-        value.type= sprintTypeMap()(root["type"].toString());
+        value.type = sprintTypeMap()(root["type"].toString());
         value.time = sprintTimeMap(root["time"].toString());
         value.startTime = timePointMap(root["startTime"].toString());
         value.finishTime = timePointMap(root["finishTime"].toString());
@@ -116,11 +116,19 @@ struct Serializer<Workday>
     }
 };
 
-Workday parseWorkday(const QString&)
+template <>
+struct Serializer<WorkdayScheme>
 {
-    // parse format '(+35m -10m) * 4 -1h + (+35m -10m) * 4'
-    return {};
-}
+    static void write(const WorkdayScheme& value, QJsonObject& root)
+    {
+        root["sprints"] = sprintSchemeMap(value.sprints);
+    }
+
+    static void read(const QJsonObject& root, WorkdayScheme& value)
+    {
+        value.sprints = sprintSchemeMap(root["sprints"].toString());
+    }
+};
 
 #endif // BEFOXY_CORE_SERIALIZER_HPP
 

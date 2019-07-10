@@ -55,10 +55,22 @@ struct WorkProgress
     int32_t maximum = 0;
 };
 
-struct Config
+//
+// TODO: replace 'sprintSchemeMap' return type with SprintScheme
+// Also do this for serialization routine
+//
+struct SprintScheme
 {
-    float sprintSwitchThresholdSec = 3.0;    
+    SprintType type = SprintType::Unknown;
+    SprintState state = SprintState::Normal;
+    SprintTime time;
 };
+
+struct WorkdayScheme
+{
+    std::vector<Sprint> sprints;
+};
+
 
 #endif // BEFOXY_CORE_COMPONENT_HPP
 

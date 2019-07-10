@@ -69,21 +69,49 @@ Befoxy::Befoxy(QWidget *parent)
             setLabelColor(progress, ColorRole::AccentCurrent);
         }
 
+        TapLabel* settings = new TapLabel("[/]", this);
+        {
+            settings->setAlignment(Qt::AlignCenter);
+            setLabelFont(settings, QFont::Light, 30);
+            setLabelColor(settings, ColorRole::AccentCurrent);
+        }
+
+        QLabel* dummy = new QLabel("   ", this);
+        {
+            dummy->setAlignment(Qt::AlignCenter);
+            setLabelFont(dummy, QFont::Light, 30);
+            setLabelColor(dummy, ColorRole::AccentCurrent);
+        }
+
+
+        QHBoxLayout* bottomBar = new QHBoxLayout(this);
+        {
+            bottomBar->addWidget(dummy);
+            bottomBar->addWidget(progress);
+            bottomBar->addWidget(settings);
+        }
+
         connect(tapButton, &TapLabel::clicked, []{
             service<Engine>().tap();
             service<DataStorage>().save();
         });
 
+        connect(settings, &TapLabel::clicked, []{
+            // 1. open some file with settings
+            // 2. reload current model and reset current workday for first iterations
+        });
+
         layout->addWidget(clockText);
         layout->addWidget(sprintName);
         layout->addWidget(tapButton);
-        layout->addWidget(progress);
+        layout->addLayout(bottomBar);
 
 
         m_clockText = clockText;
         m_sprintName = sprintName;
         m_tapButton = tapButton;
         m_progress = progress;
+        m_settings = settings;
     }
 
     // icon
@@ -214,6 +242,7 @@ void Befoxy::updateVisual()
         setLabelColor(m_sprintName, ColorRole::AccentCurrent);
         setLabelColor(m_tapButton, ColorRole::AccentCurrent);
         setLabelColor(m_progress, ColorRole::AccentCurrent);
+        setLabelColor(m_settings, ColorRole::AccentCurrent);
 
         if (m_trayIcon) {
             auto iconColor = sprintIconColorMap()(sprint.type);
