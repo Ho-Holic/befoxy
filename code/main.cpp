@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
   service<DataStorage>().load();
 
   Befoxy w;
-  w.resize(320, 320);
+  w.resize(400, 400);
   w.show();
 
   return a.exec();

@@ -34,8 +34,10 @@ namespace
 
 Befoxy::Befoxy(QWidget *parent)
 :   QWidget(parent)
-{
-    this->setWindowFlags(Qt::Popup);
+{    
+    setWindowFlags(Qt::Popup | Qt::NoDropShadowWindowHint | Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_NoSystemBackground);
+    setAttribute(Qt::WA_TranslucentBackground);
 
     // layout
     {
@@ -141,22 +143,25 @@ Befoxy::Befoxy(QWidget *parent)
 void Befoxy::paintEvent(QPaintEvent* event)
 {
     QPainter p(this);        
+    p.setRenderHint(QPainter::Antialiasing);
 
     QPen pen = p.pen();
     QBrush brush = p.brush();
 
+    qreal radius = 32.;
+    int offset = 5;
     {
         brush.setColor(ColorScheme::valueFor(ColorRole::Background));
         brush.setStyle(Qt::BrushStyle::SolidPattern);
         p.setBrush(brush);
-        p.drawRect(0, 0, width(), height());
+        p.drawRoundedRect(offset, offset, width() - offset * 2, height() - offset * 2, radius, radius);
     }
 
     {
         pen.setColor(ColorScheme::valueFor(ColorRole::AccentCurrent));
-        pen.setWidth(8);
+        pen.setWidth(4);
         p.setPen(pen);
-        p.drawRect(0, 0, width(), height());
+        p.drawRoundedRect(offset, offset, width() - offset * 2, height() - offset * 2, radius, radius);
     }
     QWidget::paintEvent(event);
 }
