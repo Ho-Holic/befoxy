@@ -6,6 +6,7 @@
 Engine::Engine()
 :   m_ideal()
 ,   m_current()
+,   m_progress()
 {
     //
 }
@@ -15,24 +16,18 @@ void Engine::init(const Workday& idealWorkday)
     Workday currentWorkday;
     currentWorkday.day = idealWorkday.day;
 
-    init(idealWorkday, currentWorkday);
+    init(idealWorkday, currentWorkday, 0);
 }
 
-void Engine::init(const Workday& idealWorkday, const Workday& currentWorkday)
+void Engine::init(const Workday& idealWorkday, const Workday& currentWorkday, size_t progress)
 {
     // clean up
     m_ideal.sprints.clear();
     m_current.sprints.clear();    
 
-    //
-    // TODO: make index based non destructive sprint advancing
-    //
-
-    // make a stack from ideal workday
-    m_ideal = idealWorkday;
-    std::reverse(m_ideal.sprints.begin(), m_ideal.sprints.end());
-
+    m_ideal = idealWorkday;    
     m_current = currentWorkday;
+    m_progress = progress;
 
     if (m_current.sprints.empty()) {
         auto now = Clock::now();
@@ -103,31 +98,24 @@ Workday Engine::currentWorkday() const
 
 Workday Engine::idealWorkday() const
 {
-    auto workdayCopy = m_ideal;
-    std::reverse(workdayCopy.sprints.begin(), workdayCopy.sprints.end());
-    return workdayCopy;
+    return m_ideal;
 }
 
-WorkProgress Engine::workProgress() const
-{
-    auto left = std::count_if(m_ideal.sprints.begin(), m_ideal.sprints.end(), &isImportantSprint);
-    auto done = std::count_if(m_current.sprints.begin(), m_current.sprints.end(), &isImportantSprint);
-
-    require(done <= (left + done));
-    require(left >= 0);
-    require(done >= 0);
-
-    return { done, left + done};
+size_t Engine::workProgress() const
+{   
+    return m_progress;
 }
 
 void Engine::activateNextSprint(const TimePoint& startTime)
 {
-    if (m_ideal.sprints.empty()) return;
+    if (m_progress < m_ideal.sprints.size()) {
 
-    auto sprint = m_ideal.sprints.back();
-    sprint.startTime = startTime;
-    sprint.finishTime = sprint.startTime + sprint.time;
+        auto sprint = m_ideal.sprints[m_progress];
+        sprint.startTime = startTime;
+        sprint.finishTime = sprint.startTime + sprint.time;
 
-    m_ideal.sprints.pop_back();
-    m_current.sprints.push_back(sprint);
+        m_progress += 1;
+
+        m_current.sprints.push_back(sprint);
+    }
 }

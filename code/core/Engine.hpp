@@ -11,7 +11,7 @@ public:
   Engine();
 public:
   void init(const Workday& idealWorkday);
-  void init(const Workday& idealWorkday, const Workday& currentWorkday);
+  void init(const Workday& idealWorkday, const Workday& currentWorkday, size_t progress);
 
 public:
   Sprint sprint() const;
@@ -19,7 +19,7 @@ public:
   void skip();    
   Workday currentWorkday() const;
   Workday idealWorkday() const;
-  WorkProgress workProgress() const;
+  size_t workProgress() const;
 
 private:
   void activateNextSprint(const TimePoint& startTime);
@@ -27,6 +27,7 @@ private:
 private:  
   Workday m_ideal;
   Workday m_current;  
+  size_t m_progress;
 };
 
 #endif // BEFOXY_CORE_ENGINE_HPP

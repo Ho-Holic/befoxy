@@ -230,10 +230,27 @@ void Befoxy::updateVisual()
     auto state = sprintStateMap()(sprint.state);
     m_sprintName->setText(QString("%1 (%2)").arg(type).arg(state));
 
-    // update progress
+    // update progress (write it with fancy std algorithm like Sean Parent would like
     {
+        auto ideal = service<Engine>().idealWorkday().sprints;
         auto progress = service<Engine>().workProgress();
-        m_progress->setText(QString("%1 / %2").arg(progress.current).arg(progress.maximum));
+        int current = 0;
+        int maximum = 0;
+
+        for (size_t i = 0; i < ideal.size(); ++i) {
+
+            const Sprint& sprint = ideal[i];
+
+            if (sprint.type == SprintType::WorkdayStart || sprint.type == SprintType::WorkdayEnd) {
+                continue;
+            }
+            if (i < progress) {
+                current += 1;
+            }
+            maximum += 1;
+        }
+
+        m_progress->setText(QString("%1 / %2").arg(current).arg(maximum));
     }
 
     // updateColors

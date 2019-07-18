@@ -49,12 +49,6 @@ struct Workday
     std::vector<Sprint> sprints;    
 };
 
-struct WorkProgress
-{
-    int32_t current = 0;
-    int32_t maximum = 0;
-};
-
 //
 // TODO: replace 'sprintSchemeMap' return type with SprintScheme
 // Also do this for serialization routine

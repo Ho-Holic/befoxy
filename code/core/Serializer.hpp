@@ -37,14 +37,16 @@ struct Serializer<Engine>
     {
         root["idealWorkday"] = writeObject(value.idealWorkday());
         root["currentWorkday"] = writeObject(value.currentWorkday());
+        root["workProgress"] = static_cast<int>(value.workProgress());
     }
 
     static void read(const QJsonObject& root, Engine& value)
     {        
         auto idealWorkday = readObject<Workday>(root["idealWorkday"].toObject());
         auto currentWorkday = readObject<Workday>(root["currentWorkday"].toObject());
+        auto workProgress = root["workProgress"].toInt();
 
-        value.init(idealWorkday, currentWorkday);
+        value.init(idealWorkday, currentWorkday, static_cast<size_t>(workProgress));
     }
 };
 
