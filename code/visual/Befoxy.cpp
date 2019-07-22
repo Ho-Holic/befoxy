@@ -215,7 +215,15 @@ void Befoxy::trayIconActivated(QSystemTrayIcon::ActivationReason reason)
 
 void Befoxy::updateVisual()
 {    
-    auto sprint = service<Engine>().sprint();
+    auto engine = service<Engine>();
+    auto sprint = engine.sprint();
+
+    bool showNextSprint = (sprint.state == SprintState::Overtime
+                           || sprint.type == SprintType::WorkdayStart);
+
+    if (showNextSprint && engine.hasUpcomingSprint()) {
+        sprint = engine.upcomingSprint();
+    }
 
     if (sprint.time.hour > 0) {
         m_clockText->setText(QString("%1:%2")
@@ -230,10 +238,10 @@ void Befoxy::updateVisual()
     auto state = sprintStateMap()(sprint.state);
     m_sprintName->setText(QString("%1 (%2)").arg(type).arg(state));
 
-    // update progress (write it with fancy std algorithm like Sean Parent would like
+    // update progress (write it with fancy std algorithm like Sean Parent would do
     {
         auto ideal = service<Engine>().idealWorkday().sprints;
-        auto progress = service<Engine>().workProgress();
+        auto progress = service<Engine>().nextSprintIndex();
         int current = 0;
         int maximum = 0;
 

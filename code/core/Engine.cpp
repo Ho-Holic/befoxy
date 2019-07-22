@@ -6,7 +6,7 @@
 Engine::Engine()
 :   m_ideal()
 ,   m_current()
-,   m_progress()
+,   m_nextSprintIndex()
 {
     //
 }
@@ -19,7 +19,7 @@ void Engine::init(const Workday& idealWorkday)
     init(idealWorkday, currentWorkday, 0);
 }
 
-void Engine::init(const Workday& idealWorkday, const Workday& currentWorkday, size_t progress)
+void Engine::init(const Workday& idealWorkday, const Workday& currentWorkday, size_t nextSprintIndex)
 {
     // clean up
     m_ideal.sprints.clear();
@@ -27,7 +27,7 @@ void Engine::init(const Workday& idealWorkday, const Workday& currentWorkday, si
 
     m_ideal = idealWorkday;    
     m_current = currentWorkday;
-    m_progress = progress;
+    m_nextSprintIndex = nextSprintIndex;
 
     if (m_current.sprints.empty()) {
         auto now = Clock::now();
@@ -66,6 +66,22 @@ Sprint Engine::sprint() const
     return sprintCopy;
 }
 
+Sprint Engine::upcomingSprint() const
+{
+    using namespace std::chrono;
+
+    require(hasUpcomingSprint());
+
+    auto sprintCopy = m_ideal.sprints[m_nextSprintIndex];
+
+    return sprintCopy;
+}
+
+bool Engine::hasUpcomingSprint() const
+{
+    return !m_ideal.sprints.empty() && m_nextSprintIndex < m_ideal.sprints.size();
+}
+
 void Engine::tap()
 {
     // tap to affect sprint: start/pause/continue
@@ -101,21 +117,22 @@ Workday Engine::idealWorkday() const
     return m_ideal;
 }
 
-size_t Engine::workProgress() const
+size_t Engine::nextSprintIndex() const
 {   
-    return m_progress;
+    return m_nextSprintIndex;
 }
 
 void Engine::activateNextSprint(const TimePoint& startTime)
 {
-    if (m_progress < m_ideal.sprints.size()) {
+    if (m_nextSprintIndex < m_ideal.sprints.size()) {
 
-        auto sprint = m_ideal.sprints[m_progress];
+        auto sprint = m_ideal.sprints[m_nextSprintIndex];
         sprint.startTime = startTime;
         sprint.finishTime = sprint.startTime + sprint.time;
 
-        m_progress += 1;
+        m_nextSprintIndex += 1;
 
         m_current.sprints.push_back(sprint);
     }
 }
+
