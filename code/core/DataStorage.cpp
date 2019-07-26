@@ -86,6 +86,9 @@ void DataStorage::setStoragePath(const QString& storagePath)
 
 QString DataStorage::sprintHistoryFilePath()
 {    
+    //
+    // TODO: use ideal sprint time as a part of file signature
+    //
     auto now = Clock::now();
     auto startOfTheDay = std::chrono::time_point_cast<backport::std::chrono::days>(now);
     auto currentDay = timePointMap(startOfTheDay);

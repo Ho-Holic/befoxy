@@ -108,7 +108,10 @@ Befoxy::Befoxy(QWidget *parent)
 
             // TODO: reload current model and reset current workday for first iterations
             auto settingsPath = service<DataStorage>().settingsFilePath();
-            QDesktopServices::openUrl(QUrl::fromLocalFile(settingsPath));
+            bool success = QDesktopServices::openUrl(QUrl::fromLocalFile(settingsPath));
+            if (!success) {
+                // TODO: blink with interface window about error
+            }
         });
 
         layout->addWidget(clockText);
