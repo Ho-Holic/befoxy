@@ -11,11 +11,10 @@ public:
     void save();
 public:
   void setStoragePath(const QString& storagePath);      
-private:
   QString sprintHistoryFilePath();
   QString settingsFilePath();
-  Workday firstRunWorkday();
 private:
+  Workday firstRunWorkday();
   void saveDefaultSettings();
   // void loadSettings(); // TODO: later, now this is too much
   // void saveSettings(); // TODO: later, now this is too much

@@ -1,4 +1,5 @@
 #include "Befoxy.hpp"
+
 #include <QPainter>
 #include <QTimer>
 #include <QLabel>
@@ -6,12 +7,17 @@
 #include <QVBoxLayout>
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QDesktopServices>
+#include <QUrl>
+
 #include <core/Services.hpp>
 #include <core/Conversion.hpp>
 #include <visual/Conversion.hpp>
 #include <visual/IconGenerator.hpp>
 #include <visual/TapLabel.hpp>
 #include <visual/ColorScheme.hpp>
+
+#include <vector>
 
 namespace
 {
@@ -28,7 +34,7 @@ namespace
         QFont font = label->font();
         font.setPointSize(pointSize);
         font.setWeight(weight);
-        label->setFont(font);
+        label->setFont(font);        
     }
 }
 
@@ -41,7 +47,7 @@ Befoxy::Befoxy(QWidget *parent)
 
     // layout
     {
-        QVBoxLayout* layout = new QVBoxLayout(this);
+        QVBoxLayout* layout = new QVBoxLayout(this);        
 
         QLabel* clockText = new QLabel("00:00", this);
         {            
@@ -86,7 +92,7 @@ Befoxy::Befoxy(QWidget *parent)
         }
 
 
-        QHBoxLayout* bottomBar = new QHBoxLayout(this);
+        QHBoxLayout* bottomBar = new QHBoxLayout();
         {
             bottomBar->addWidget(dummy);
             bottomBar->addWidget(progress);
@@ -99,8 +105,10 @@ Befoxy::Befoxy(QWidget *parent)
         });
 
         connect(settings, &TapLabel::clicked, []{
-            // 1. open some file with settings
-            // 2. reload current model and reset current workday for first iterations
+
+            // TODO: reload current model and reset current workday for first iterations
+            auto settingsPath = service<DataStorage>().settingsFilePath();
+            QDesktopServices::openUrl(QUrl::fromLocalFile(settingsPath));
         });
 
         layout->addWidget(clockText);
