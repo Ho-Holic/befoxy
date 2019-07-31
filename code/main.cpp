@@ -2,6 +2,7 @@
 #include <QApplication>
 #include <QStandardPaths>
 #include <core/Services.hpp>
+#include <core/DataStorage.hpp>
 #include <QDir>
 
 #include <QDebug>
@@ -25,7 +26,8 @@ int main(int argc, char *argv[])
       }
   }
 
-  service<DataStorage>().load();
+  service<DataStorage>().loadPreferences();
+  service<DataStorage>().loadEngine();
 
   Befoxy w;
   w.resize(400, 400);

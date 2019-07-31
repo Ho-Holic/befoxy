@@ -1,9 +1,10 @@
 #ifndef BEFOXY_CORE_SERIALIZER_HPP
 #define BEFOXY_CORE_SERIALIZER_HPP
 
-#include "core/Component.hpp"
-#include "core/Engine.hpp"
-#include "core/Conversion.hpp"
+#include <core/Component.hpp>
+#include <core/Engine.hpp>
+#include <core/Conversion.hpp>
+#include <core/Preferences.hpp>
 #include <QJsonObject>
 #include <QJsonArray>
 
@@ -29,6 +30,21 @@ inline T readObject(const QJsonObject& object)
     Serializer<T>::read(object, value);
     return value;
 }
+
+template <>
+struct Serializer<Preferences>
+{
+    static void write(const Preferences& value, QJsonObject& root)
+    {
+        root["workdayScheme"] = writeObject(value.workdayScheme());
+    }
+
+    static void read(const QJsonObject& root, Preferences& value)
+    {
+        auto scheme = readObject<WorkdayScheme>(root["workdayScheme"].toObject());
+        value.setWorkdayScheme(scheme);
+    }
+};
 
 template <>
 struct Serializer<Engine>

@@ -11,11 +11,14 @@
 #include <QUrl>
 
 #include <core/Services.hpp>
+#include <core/Engine.hpp>
+#include <core/DataStorage.hpp>
 #include <core/Conversion.hpp>
 #include <visual/Conversion.hpp>
 #include <visual/IconGenerator.hpp>
 #include <visual/TapLabel.hpp>
 #include <visual/ColorScheme.hpp>
+#include <visual/NewDayWatcher.hpp>
 
 #include <vector>
 
@@ -101,13 +104,13 @@ Befoxy::Befoxy(QWidget *parent)
 
         connect(tapButton, &TapLabel::clicked, []{
             service<Engine>().tap();
-            service<DataStorage>().save();
+            service<DataStorage>().saveEngine();
         });
 
         connect(settings, &TapLabel::clicked, []{
 
             // TODO: reload current model and reset current workday for first iterations
-            auto settingsPath = service<DataStorage>().settingsFilePath();
+            auto settingsPath = service<DataStorage>().preferencesFilePath();
             bool success = QDesktopServices::openUrl(QUrl::fromLocalFile(settingsPath));
             if (!success) {
                 // TODO: blink with interface window about error
@@ -149,6 +152,8 @@ Befoxy::Befoxy(QWidget *parent)
     }
 
     updateVisual();
+
+    NewDayWatcher* watcher = new NewDayWatcher(this);
 }
 
 void Befoxy::paintEvent(QPaintEvent* event)

@@ -9,6 +9,8 @@ class NewDayWatcher : public QObject
     Q_OBJECT
 public:
     NewDayWatcher(QObject* parent = nullptr);
+private slots:
+    void checkForNewDay();
 signals:
     void onNewDate(const QDateTime& datetime);
 };

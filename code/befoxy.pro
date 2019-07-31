@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     visual/NewDayWatcher.cpp \
     visual/IconGenerator.cpp \
     visual/TapLabel.cpp \
-    visual/ColorScheme.cpp
+    visual/ColorScheme.cpp \
+    core/Preferences.cpp
 
 HEADERS  += visual/Befoxy.hpp \
     core/Serializer.hpp \
@@ -40,5 +41,6 @@ HEADERS  += visual/Befoxy.hpp \
     visual/TapLabel.hpp \
     core/Methods.hpp \
     visual/ColorScheme.hpp \
-    style/Backport.hpp
+    style/Backport.hpp \
+    core/Preferences.hpp
 

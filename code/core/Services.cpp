@@ -1,17 +1,26 @@
 #include "Services.hpp"
 
-Engine& Services::engine()
+#include <core/Engine.hpp>
+#include <core/DataStorage.hpp>
+#include <core/Preferences.hpp>
+
+template <>
+DataStorage& service<DataStorage>()
 {
-    return m_engine;
+    static DataStorage instance;
+    return instance;
 }
 
-DataStorage& Services::dataStorage()
+template <>
+Engine& service<Engine>()
 {
-    return m_dataStorage;
+    static Engine instance;
+    return instance;
 }
 
-Services& services()
+template<>
+Preferences& service<Preferences>()
 {
-    static Services servicesInstance;
-    return servicesInstance;
+    static Preferences instance;
+    return instance;
 }

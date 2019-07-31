@@ -7,17 +7,16 @@
 class DataStorage
 {
 public:    
-    void load();
-    void save();
+    void loadEngine();
+    void saveEngine();
+    void loadPreferences();
+    void savePreferences();
 public:
   void setStoragePath(const QString& storagePath);      
   QString sprintHistoryFilePath();
-  QString settingsFilePath();
+  QString preferencesFilePath();
 private:
-  Workday firstRunWorkday();
-  void saveDefaultSettings();
-  // void loadSettings(); // TODO: later, now this is too much
-  // void saveSettings(); // TODO: later, now this is too much
+  Workday firstRunWorkday();  
 private:
   QString m_storagePath;    
   QString m_sprintHistoryFileName;

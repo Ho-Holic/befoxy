@@ -7,100 +7,63 @@
 #include <QDebug>
 #include <style/Backport.hpp>
 
-namespace {
-    std::vector<Sprint> defaultSprintConfiguration()
-    {
-        std::vector<Sprint> w = {
-            { SprintType::WorkdayStart, SprintState::Normal, {0, 0, 0}, {}, {}, {} },
-
-            { SprintType::Work,  SprintState::Normal, {0, 0, 15}, {}, {}, {} },
-            { SprintType::Rest,  SprintState::Normal, {0, 0, 5}, {}, {}, {} },
-            { SprintType::Work,  SprintState::Normal, {0, 0, 15}, {}, {}, {} },
-            { SprintType::Rest,  SprintState::Normal, {0, 0, 5}, {}, {}, {} },
-
-            { SprintType::WorkdayEnd,  SprintState::Normal, {0, 0, 0}, {}, {}, {} },
-        };        
-
-        return w;
-    }
-}
-
 Workday DataStorage::firstRunWorkday()
 {
     auto now = Clock::now();
     auto startOfTheDay = std::chrono::time_point_cast<backport::std::chrono::days>(now);
 
-    QFile settings(settingsFilePath());
+    return Workday { startOfTheDay, service<Preferences>().workdayScheme().sprints };
+}
 
-    if ( ! settings.open(QIODevice::ReadOnly | QIODevice::Text)) {
+void DataStorage::loadPreferences()
+{
+    QFile preferences(preferencesFilePath());
 
-        saveDefaultSettings();
-        return Workday { startOfTheDay, defaultSprintConfiguration() };
+    if ( ! preferences.open(QIODevice::ReadOnly | QIODevice::Text)) {
+
+        savePreferences();
+        return;
     }
 
-    QByteArray saveData = settings.readAll();
+    QByteArray saveData = preferences.readAll();
     QJsonParseError parseError;
     QJsonDocument document(QJsonDocument::fromJson(saveData, &parseError));
 
     if (parseError.error != QJsonParseError::NoError) {
 
         qDebug() << parseError.errorString();
-
-        saveDefaultSettings();
-        return Workday { startOfTheDay, defaultSprintConfiguration() };
+        return; // message user about it?
     }
 
     QJsonObject object = document.object();
     auto scheme = readObject<WorkdayScheme>(object["workdayScheme"].toObject());
 
-    return Workday { startOfTheDay, scheme.sprints };
+    Serializer<Preferences>::read(document.object(), service<Preferences>());
+
+    preferences.close();
 }
 
-void DataStorage::saveDefaultSettings()
+void DataStorage::savePreferences()
 {
-    QFile settings(settingsFilePath());
-    if ( ! settings.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
+    QFile preferences(preferencesFilePath());
+    if ( ! preferences.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
 
         // we don't care here if user don't get our default settings
         return;
     }
 
-    {
-        WorkdayScheme scheme;
-        scheme.sprints = defaultSprintConfiguration();
-
+    {                
         QJsonObject object;
-        object["workdayScheme"] = writeObject(scheme);
+        Serializer<Preferences>::write(service<Preferences>(), object);
 
         QJsonDocument document(object);
-        settings.write(document.toJson());
+        preferences.write(document.toJson());
     }
 
-    settings.close();
+    preferences.close();
 }
 
-void DataStorage::setStoragePath(const QString& storagePath)
-{
-    m_storagePath = storagePath;
-}
-
-QString DataStorage::sprintHistoryFilePath()
-{    
-    //
-    // TODO: use ideal sprint time as a part of file signature
-    //
-    auto now = Clock::now();
-    auto startOfTheDay = std::chrono::time_point_cast<backport::std::chrono::days>(now);
-    auto currentDay = timePointMap(startOfTheDay);
-    return m_storagePath + QString("sprintHistory_%1.json").arg(currentDay);
-}
-
-QString DataStorage::settingsFilePath()
-{
-    return m_storagePath + "befoxySettings.json";
-}
-
-void DataStorage::load()
+void DataStorage::loadEngine()
 {
     QFile sprintHistory(sprintHistoryFilePath());
 
@@ -126,7 +89,7 @@ void DataStorage::load()
     sprintHistory.close();
 }
 
-void DataStorage::save()
+void DataStorage::saveEngine()
 {
     QFile sprintHistory(sprintHistoryFilePath());
     if ( ! sprintHistory.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text)) {
@@ -143,4 +106,25 @@ void DataStorage::save()
     }
 
     sprintHistory.close();
+}
+
+void DataStorage::setStoragePath(const QString& storagePath)
+{
+    m_storagePath = storagePath;
+}
+
+QString DataStorage::sprintHistoryFilePath()
+{
+    //
+    // TODO: use ideal sprint time as a part of file signature
+    //
+    auto now = Clock::now() + std::chrono::hours(3); // UTC+3 for Moscow
+    auto startOfTheDay = std::chrono::time_point_cast<backport::std::chrono::days>(now);
+    auto currentDay = timePointMap(startOfTheDay);
+    return m_storagePath + QString("sprintHistory_%1.json").arg(currentDay);
+}
+
+QString DataStorage::preferencesFilePath()
+{
+    return m_storagePath + "befoxyPreferences.json";
 }
